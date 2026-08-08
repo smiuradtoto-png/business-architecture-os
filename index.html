@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Business Hypothesis Engine — Interactive Demo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#152C46;
+    --bg-deep:#0F2136;
+    --panel:#1C3B5C;
+    --panel-raised:#234870;
+    --line: rgba(255,255,255,0.14);
+    --line-soft: rgba(255,255,255,0.07);
+    --paper:#F4F0E6;
+    --paper-dim:#AFC1D4;
+    --paper-faint:#7E96AF;
+    --amber:#E8A33D;
+    --rust:#C05B4D;
+    --teal:#5FAE9E;
+    --radius:2px;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:
+      linear-gradient(var(--line-soft) 1px, transparent 1px) 0 0/40px 40px,
+      linear-gradient(90deg, var(--line-soft) 1px, transparent 1px) 0 0/40px 40px,
+      var(--bg);
+    color:var(--paper);
+    font-family:'IBM Plex Sans', sans-serif;
+    line-height:1.55;
+    min-height:100vh;
+  }
+  a{color:var(--amber);}
+  .wrap{max-width:960px;margin:0 auto;padding:48px 24px 96px;}
+
+  /* header */
+  .topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:56px;flex-wrap:wrap;gap:16px;}
+  .eyebrow{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:12px;letter-spacing:0.14em;text-transform:uppercase;
+    color:var(--amber);margin:0 0 12px;
+  }
+  h1{
+    font-family:'Space Grotesk', sans-serif;
+    font-weight:600;font-size:clamp(28px,4vw,40px);
+    margin:0 0 14px;color:var(--paper);letter-spacing:-0.01em;
+  }
+  .lede{color:var(--paper-dim);max-width:600px;font-size:15.5px;margin:0;}
+
+  .lang-toggle{display:flex;border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;height:fit-content;}
+  .lang-toggle button{
+    font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:0.05em;
+    background:transparent;color:var(--paper-dim);border:none;padding:8px 14px;cursor:pointer;
+  }
+  .lang-toggle button.active{background:var(--panel-raised);color:var(--paper);}
+  .lang-toggle button:focus-visible{outline:2px solid var(--amber);outline-offset:-2px;}
+
+  /* registration crosshairs, used sparingly */
+  .drafted{position:relative;}
+  .drafted::before,.drafted::after,
+  .drafted .cr-br,.drafted .cr-bl{
+    content:"";position:absolute;width:14px;height:14px;
+    border-color:var(--paper-faint);opacity:0.55;
+  }
+  .drafted::before{top:-1px;left:-1px;border-top:1px solid;border-left:1px solid;}
+  .drafted::after{top:-1px;right:-1px;border-top:1px solid;border-right:1px solid;}
+  .drafted .cr-bl{bottom:-1px;left:-1px;border-bottom:1px solid;border-left:1px solid;}
+  .drafted .cr-br{bottom:-1px;right:-1px;border-bottom:1px solid;border-right:1px solid;}
+
+  /* input panel */
+  .panel{
+    background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);
+    padding:32px;margin-bottom:40px;
+  }
+  .panel h2{
+    font-family:'Space Grotesk',sans-serif;font-size:17px;margin:0 0 6px;color:var(--paper);
+  }
+  .panel .sub{font-size:13px;color:var(--paper-faint);margin:0 0 26px;}
+  .field-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:20px 24px;}
+  @media (max-width:640px){.field-grid{grid-template-columns:1fr;}}
+  .field{display:flex;flex-direction:column;gap:6px;}
+  .field label{
+    font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.08em;
+    text-transform:uppercase;color:var(--paper-faint);
+  }
+  .field input,.field select{
+    background:var(--bg-deep);border:1px solid var(--line);border-radius:var(--radius);
+    color:var(--paper);font-family:'IBM Plex Sans',sans-serif;font-size:14.5px;padding:10px 12px;
+  }
+  .field input::placeholder{color:var(--paper-faint);}
+  .field input:focus-visible,.field select:focus-visible{outline:2px solid var(--amber);outline-offset:1px;}
+
+  .radio-group{display:flex;flex-wrap:wrap;gap:10px 22px;margin-top:2px;}
+  .radio-option{display:flex;align-items:center;gap:8px;}
+  .radio-option input[type="radio"]{
+    width:16px;height:16px;accent-color:var(--amber);cursor:pointer;flex-shrink:0;
+  }
+  .radio-option input[type="radio"]:focus-visible{outline:2px solid var(--amber);outline-offset:2px;}
+  .radio-option label{font-size:14px;color:var(--paper-dim);cursor:pointer;}
+
+  .generate-row{margin-top:28px;display:flex;align-items:center;gap:16px;flex-wrap:wrap;}
+  .stamp-btn{
+    font-family:'IBM Plex Mono',monospace;font-size:13px;letter-spacing:0.06em;text-transform:uppercase;
+    background:transparent;color:var(--amber);border:2px solid var(--amber);border-radius:var(--radius);
+    padding:12px 22px;cursor:pointer;transition:background .15s, color .15s;
+  }
+  .stamp-btn:hover{background:var(--amber);color:var(--bg-deep);}
+  .stamp-btn:focus-visible{outline:2px solid var(--paper);outline-offset:2px;}
+  .stamp-btn:disabled{opacity:0.45;cursor:default;background:transparent;color:var(--amber);}
+  .status-text{font-family:'IBM Plex Mono',monospace;font-size:12.5px;color:var(--paper-faint);}
+  .error-text{font-family:'IBM Plex Mono',monospace;font-size:12.5px;color:var(--rust);}
+
+  /* margin notes: facts/assumptions/unknowns */
+  .notes{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:32px;}
+  @media (max-width:720px){.notes{grid-template-columns:1fr;}}
+  .note{border-left:2px solid var(--line);padding:4px 0 4px 14px;}
+  .note h4{
+    font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.1em;text-transform:uppercase;
+    margin:0 0 8px;
+  }
+  .note.facts h4{color:var(--teal);}
+  .note.assumptions h4{color:var(--amber);}
+  .note.unknowns h4{color:var(--rust);}
+  .note ul{margin:0;padding:0;list-style:none;font-size:13px;color:var(--paper-dim);}
+  .note li{margin-bottom:6px;}
+
+  /* hypothesis cards */
+  .rec-label{
+    font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.1em;text-transform:uppercase;
+    color:var(--amber);margin:0 0 12px;
+  }
+  .card{
+    background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);
+    padding:26px 26px 22px;margin-bottom:20px;position:relative;
+  }
+  .card.recommendation{border-color:var(--amber);background:var(--panel-raised);}
+  .card-top{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;margin-bottom:14px;}
+  .card h3{font-family:'Space Grotesk',sans-serif;font-size:17px;margin:0;color:var(--paper);}
+  .alt-tag{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--paper-faint);}
+
+  .stamp{
+    font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:0.08em;text-transform:uppercase;
+    padding:5px 10px;border:1.5px dashed currentColor;border-radius:var(--radius);
+    transform:rotate(-3deg);white-space:nowrap;flex-shrink:0;
+  }
+  .stamp.high{color:var(--teal);}
+  .stamp.medium{color:var(--amber);}
+  .stamp.low{color:var(--rust);}
+
+  .kv{margin-bottom:12px;}
+  .kv .k{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.06em;text-transform:uppercase;color:var(--paper-faint);display:block;margin-bottom:4px;}
+  .kv .v{font-size:14px;color:var(--paper-dim);}
+  .confidence-reason{font-size:12.5px;color:var(--paper-faint);margin-top:2px;font-style:italic;}
+
+  .action-row{display:flex;gap:10px;margin-top:18px;flex-wrap:wrap;}
+  .action-btn{
+    font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:0.05em;text-transform:uppercase;
+    background:transparent;border:1px solid var(--line);color:var(--paper-dim);border-radius:var(--radius);
+    padding:8px 14px;cursor:pointer;
+  }
+  .action-btn:hover{border-color:var(--paper);color:var(--paper);}
+  .action-btn.accept:hover{border-color:var(--teal);color:var(--teal);}
+  .action-btn.reject:hover{border-color:var(--rust);color:var(--rust);}
+  .action-btn:focus-visible{outline:2px solid var(--amber);outline-offset:1px;}
+  .action-btn.done{opacity:0.4;cursor:default;}
+
+  .modify-box{margin-top:14px;}
+  .modify-box textarea{
+    width:100%;min-height:70px;background:var(--bg-deep);border:1px solid var(--line);
+    border-radius:var(--radius);color:var(--paper);font-family:'IBM Plex Sans',sans-serif;font-size:13.5px;
+    padding:10px;resize:vertical;
+  }
+  .modify-box .save-row{margin-top:8px;display:flex;gap:8px;}
+
+  .alts-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;}
+  @media (max-width:840px){.alts-grid{grid-template-columns:1fr;}}
+
+  /* decision log */
+  .log-section{margin-top:56px;}
+  .log-section h2{font-family:'Space Grotesk',sans-serif;font-size:18px;margin:0 0 4px;}
+  .log-section .sub{font-size:13px;color:var(--paper-faint);margin:0 0 20px;}
+  .log-empty{font-size:13.5px;color:var(--paper-faint);border:1px dashed var(--line);padding:20px;border-radius:var(--radius);text-align:center;}
+  .log-entry{
+    display:grid;grid-template-columns:70px 1fr 100px;gap:14px;align-items:start;
+    padding:14px 0;border-bottom:1px solid var(--line-soft);font-size:13.5px;
+  }
+  .log-entry .ver{font-family:'IBM Plex Mono',monospace;color:var(--amber);font-size:12px;}
+  .log-entry .desc{color:var(--paper-dim);}
+  .log-entry .desc b{color:var(--paper);}
+  .log-entry .time{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--paper-faint);text-align:right;}
+
+  footer{margin-top:64px;font-size:12px;color:var(--paper-faint);border-top:1px solid var(--line-soft);padding-top:20px;}
+
+  @media (prefers-reduced-motion: no-preference){
+    .card, .stamp-btn{transition:transform .15s ease, background .15s ease, color .15s ease;}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="topbar">
+    <div>
+      <p class="eyebrow" id="eyebrow">MODULE 02 / BUSINESS HYPOTHESIS</p>
+      <h1 id="title">Business Hypothesis Engine</h1>
+      <p class="lede" id="lede">Enter a few real variables. The engine drafts one AI recommendation and three structurally distinct alternatives — each stamped with its own confidence, benefit, and risk. Nothing here is presented as fact unless it's marked as one.</p>
+    </div>
+    <div class="lang-toggle" role="group" aria-label="Language">
+      <button id="btn-en" class="active" onclick="setLang('en')">EN</button>
+      <button id="btn-ja" onclick="setLang('ja')">日本語</button>
+      <button id="btn-es" onclick="setLang('es')">ES</button>
+      <button id="btn-pt" onclick="setLang('pt')">PT</button>
+    </div>
+  </div>
+
+  <section class="panel drafted">
+    <span class="cr-bl"></span><span class="cr-br"></span>
+    <h2 id="panel-h2">Business Definition (inputs)</h2>
+    <p class="sub" id="panel-sub">These map directly to the Business Definition module — the same fields used before any research or strategy step begins.</p>
+    <div class="field-grid">
+      <div class="field">
+        <label id="lbl-company" for="in-company">Company / Product</label>
+        <input id="in-company" type="text" placeholder="e.g. B2B AI reskilling platform">
+      </div>
+      <div class="field">
+        <label id="lbl-country" for="in-country">Target Country / Market</label>
+        <select id="in-country" onchange="toggleCountryOther()"></select>
+      </div>
+      <div class="field" id="in-country-other-wrap" style="display:none;">
+        <label id="lbl-country-other" for="in-country-other">Specify market</label>
+        <input id="in-country-other" type="text" placeholder="e.g. Nigeria">
+      </div>
+      <div class="field">
+        <label id="lbl-type" for="in-type">Business Type</label>
+        <select id="in-type">
+          <option value="B2B">B2B</option>
+          <option value="B2C">B2C</option>
+          <option value="B2B2C">B2B2C</option>
+        </select>
+      </div>
+      <div class="field">
+        <label id="lbl-budget" for="in-budget">Monthly Budget</label>
+        <select id="in-budget">
+          <option value="Under $10k/month">Under $10k / month</option>
+          <option value="$10k-$50k/month">$10k–$50k / month</option>
+          <option value="$50k+/month">$50k+ / month</option>
+          <option value="Unknown">Unknown</option>
+        </select>
+      </div>
+      <div class="field" style="grid-column:1/-1;">
+        <label id="lbl-goal">Business Objective</label>
+        <div class="radio-group" id="goal-group"></div>
+      </div>
+      <div class="field" id="goal-other-wrap" style="grid-column:1/-1;display:none;">
+        <label id="lbl-goal-other" for="in-goal-other">Specify objective</label>
+        <input id="in-goal-other" type="text" placeholder="e.g. Investor due diligence">
+      </div>
+    </div>
+    <div class="generate-row">
+      <button class="stamp-btn" id="gen-btn" onclick="generate()">Generate Hypotheses</button>
+      <span class="status-text" id="status-text"></span>
+    </div>
+  </section>
+
+  <div id="results"></div>
+
+  <section class="log-section">
+    <h2 id="log-h2">Decision Log</h2>
+    <p class="sub" id="log-sub">Every accepted hypothesis is recorded here as a new version. Nothing is overwritten.</p>
+    <div id="log-list"><div class="log-empty" id="log-empty">No decisions logged yet.</div></div>
+  </section>
+
+  <footer id="footer">
+    This is a live demo — each click calls the Claude API directly and generates a genuinely new hypothesis set. It is a working fragment of a larger Business Architecture OS, not a scripted animation.
+  </footer>
+
+</div>
+
+<script>
+let lang = 'en';
+let version = 0;
+const decisionLog = [];
+
+// ↓ デプロイ後、実際のhypothesis-proxy WorkerのURLに書き換える
+const API_ENDPOINT = "https://hypothesis-proxy.YOUR-SUBDOMAIN.workers.dev";
+
+const COUNTRIES = [
+  {value:"Japan", en:"Japan", ja:"日本", es:"Japón", pt:"Japão"},
+  {value:"United States", en:"United States", ja:"アメリカ", es:"Estados Unidos", pt:"Estados Unidos"},
+  {value:"United Kingdom", en:"United Kingdom", ja:"イギリス", es:"Reino Unido", pt:"Reino Unido"},
+  {value:"Germany", en:"Germany", ja:"ドイツ", es:"Alemania", pt:"Alemanha"},
+  {value:"France", en:"France", ja:"フランス", es:"Francia", pt:"França"},
+  {value:"Spain", en:"Spain", ja:"スペイン", es:"España", pt:"Espanha"},
+  {value:"Portugal", en:"Portugal", ja:"ポルトガル", es:"Portugal", pt:"Portugal"},
+  {value:"Brazil", en:"Brazil", ja:"ブラジル", es:"Brasil", pt:"Brasil"},
+  {value:"Mexico", en:"Mexico", ja:"メキシコ", es:"México", pt:"México"},
+  {value:"Colombia", en:"Colombia", ja:"コロンビア", es:"Colombia", pt:"Colômbia"},
+  {value:"Argentina", en:"Argentina", ja:"アルゼンチン", es:"Argentina", pt:"Argentina"},
+  {value:"Indonesia", en:"Indonesia", ja:"インドネシア", es:"Indonesia", pt:"Indonésia"},
+  {value:"India", en:"India", ja:"インド", es:"India", pt:"Índia"},
+  {value:"Netherlands", en:"Netherlands", ja:"オランダ", es:"Países Bajos", pt:"Países Baixos"},
+  {value:"Poland", en:"Poland", ja:"ポーランド", es:"Polonia", pt:"Polônia"},
+  {value:"United Arab Emirates", en:"United Arab Emirates", ja:"アラブ首長国連邦", es:"Emiratos Árabes Unidos", pt:"Emirados Árabes Unidos"},
+  {value:"Saudi Arabia", en:"Saudi Arabia", ja:"サウジアラビア", es:"Arabia Saudita", pt:"Arábia Saudita"},
+  {value:"__other__", en:"Other — specify", ja:"その他(入力)", es:"Otro — especificar", pt:"Outro — especificar"}
+];
+
+const GOALS = [
+  {value:"Market Validation", en:"Market Validation", ja:"市場検証", es:"Validación de mercado", pt:"Validação de mercado"},
+  {value:"Market Entry", en:"Market Entry", ja:"市場参入", es:"Entrada al mercado", pt:"Entrada no mercado"},
+  {value:"Business Growth", en:"Business Growth", ja:"事業成長", es:"Crecimiento del negocio", pt:"Crescimento do negócio"},
+  {value:"Business Optimization", en:"Business Optimization", ja:"事業最適化", es:"Optimización del negocio", pt:"Otimização do negócio"},
+  {value:"Other", en:"Other", ja:"その他", es:"Otro", pt:"Outro"}
+];
+
+const STR = {
+  en:{
+    eyebrow:'MODULE 02 / BUSINESS HYPOTHESIS',
+    title:'Business Hypothesis Engine',
+    lede:"Enter a few real variables. The engine drafts one AI recommendation and three structurally distinct alternatives — each stamped with its own confidence, benefit, and risk. Nothing here is presented as fact unless it's marked as one.",
+    panelH2:'Business Definition (inputs)',
+    panelSub:'These map directly to the Business Definition module — the same fields used before any research or strategy step begins.',
+    lblCompany:'Company / Product', lblCountry:'Target Country / Market', lblType:'Business Type',
+    lblBudget:'Monthly Budget', lblGoal:'Business Objective',
+    lblCountryOther:'Specify market', countryOtherPlaceholder:'e.g. Nigeria',
+    lblGoalOther:'Specify objective', goalOtherPlaceholder:'e.g. Investor due diligence',
+    genBtn:'Generate Hypotheses', genBtnLoading:'Generating…',
+    logH2:'Decision Log', logSub:'Every accepted hypothesis is recorded here as a new version. Nothing is overwritten.',
+    logEmpty:'No decisions logged yet.',
+    facts:'Facts', assumptions:'Assumptions', unknowns:'Unknowns',
+    recommendation:'AI Recommendation', alternative:'Alternative',
+    reason:'Reason', confidence:'Confidence', benefit:'Expected Benefit', risk:'Risk',
+    accept:'Accept', modify:'Modify', reject:'Reject', accepted:'Accepted', rejected:'Rejected',
+    saveBtn:'Save & Accept', cancelBtn:'Cancel',
+    errNoInput:'Fill in at least Company / Product and Target Country before generating.',
+    errApi:'Generation failed — check your connection and try again.',
+    footer:'This is a live demo — each click calls the Claude API directly and generates a genuinely new hypothesis set. It is a working fragment of a larger Business Architecture OS, not a scripted animation.'
+  },
+  ja:{
+    eyebrow:'モジュール02 / ビジネス仮説',
+    title:'ビジネス仮説エンジン',
+    lede:'実際の変数をいくつか入力してください。AIレコメンド1件と、構造的に異なる代替仮説3件(A/B/C)を生成します。各仮説にはConfidence(確度)・Expected Benefit(期待効果)・Risk(リスク)が明示され、事実として断定されるのは事実だけです。',
+    panelH2:'ビジネス定義(入力)',
+    panelSub:'Business Definitionモジュールに対応する入力項目です。リサーチや戦略立案の前に、まずここを固定します。',
+    lblCompany:'会社名 / プロダクト', lblCountry:'対象国・市場', lblType:'ビジネスタイプ',
+    lblBudget:'月間予算', lblGoal:'事業目的',
+    lblCountryOther:'市場を入力', countryOtherPlaceholder:'例:ナイジェリア',
+    lblGoalOther:'目的を入力', goalOtherPlaceholder:'例:投資家向けデューデリジェンス',
+    genBtn:'仮説を生成', genBtnLoading:'生成中…',
+    logH2:'意思決定ログ', logSub:'採用された仮説はここに新バージョンとして記録されます。上書きはされません。',
+    logEmpty:'まだ記録された決定はありません。',
+    facts:'事実(Facts)', assumptions:'前提(Assumptions)', unknowns:'不明点(Unknowns)',
+    recommendation:'AIレコメンド', alternative:'代替案',
+    reason:'理由', confidence:'確度', benefit:'期待される効果', risk:'リスク',
+    accept:'採用', modify:'修正', reject:'却下', accepted:'採用済み', rejected:'却下済み',
+    saveBtn:'保存して採用', cancelBtn:'キャンセル',
+    errNoInput:'生成する前に、会社名/プロダクトと対象国は最低限入力してください。',
+    errApi:'生成に失敗しました。接続を確認して再度お試しください。',
+    footer:'これはライブデモです。クリックするたびにClaude APIを直接呼び出し、実際に新しい仮説セットを生成します。これは大きなBusiness Architecture OSの一部を実働させたものであり、演出されたアニメーションではありません。'
+  },
+  es:{
+    eyebrow:'MÓDULO 02 / HIPÓTESIS DE NEGOCIO',
+    title:'Motor de Hipótesis de Negocio',
+    lede:"Introduce algunas variables reales. El motor redacta una recomendación de la IA y tres alternativas estructuralmente distintas, cada una con su propio nivel de confianza, beneficio esperado y riesgo. Nada aquí se presenta como un hecho salvo que esté marcado como tal.",
+    panelH2:'Definición del Negocio (entradas)',
+    panelSub:'Estos campos corresponden directamente al módulo de Definición del Negocio: los mismos datos que se usan antes de cualquier investigación o estrategia.',
+    lblCompany:'Empresa / Producto', lblCountry:'País / Mercado objetivo', lblType:'Tipo de negocio',
+    lblBudget:'Presupuesto mensual', lblGoal:'Objetivo del negocio',
+    lblCountryOther:'Especifica el mercado', countryOtherPlaceholder:'p. ej. Nigeria',
+    lblGoalOther:'Especifica el objetivo', goalOtherPlaceholder:'p. ej. debida diligencia para inversores',
+    genBtn:'Generar hipótesis', genBtnLoading:'Generando…',
+    logH2:'Registro de Decisiones', logSub:'Cada hipótesis aceptada se registra aquí como una nueva versión. Nada se sobrescribe.',
+    logEmpty:'Aún no se ha registrado ninguna decisión.',
+    facts:'Hechos', assumptions:'Supuestos', unknowns:'Incógnitas',
+    recommendation:'Recomendación de la IA', alternative:'Alternativa',
+    reason:'Razón', confidence:'Confianza', benefit:'Beneficio esperado', risk:'Riesgo',
+    accept:'Aceptar', modify:'Modificar', reject:'Rechazar', accepted:'Aceptado', rejected:'Rechazado',
+    saveBtn:'Guardar y aceptar', cancelBtn:'Cancelar',
+    errNoInput:'Completa al menos Empresa/Producto y el País objetivo antes de generar.',
+    errApi:'Error al generar. Verifica tu conexión e inténtalo de nuevo.',
+    footer:'Esta es una demo en vivo: cada clic llama directamente a la API de Claude y genera un conjunto de hipótesis realmente nuevo. Es un fragmento funcional de un sistema más amplio de Arquitectura de Negocio, no una animación guionizada.'
+  },
+  pt:{
+    eyebrow:'MÓDULO 02 / HIPÓTESE DE NEGÓCIO',
+    title:'Motor de Hipóteses de Negócio',
+    lede:"Insira algumas variáveis reais. O motor elabora uma recomendação da IA e três alternativas estruturalmente diferentes, cada uma com seu próprio nível de confiança, benefício esperado e risco. Nada aqui é apresentado como fato, a menos que esteja marcado como tal.",
+    panelH2:'Definição do Negócio (entradas)',
+    panelSub:'Estes campos correspondem diretamente ao módulo de Definição do Negócio — os mesmos dados usados antes de qualquer pesquisa ou estratégia.',
+    lblCompany:'Empresa / Produto', lblCountry:'País / Mercado-alvo', lblType:'Tipo de negócio',
+    lblBudget:'Orçamento mensal', lblGoal:'Objetivo do negócio',
+    lblCountryOther:'Especifique o mercado', countryOtherPlaceholder:'ex.: Nigéria',
+    lblGoalOther:'Especifique o objetivo', goalOtherPlaceholder:'ex.: due diligence para investidores',
+    genBtn:'Gerar hipóteses', genBtnLoading:'Gerando…',
+    logH2:'Registro de Decisões', logSub:'Cada hipótese aceita é registrada aqui como uma nova versão. Nada é sobrescrito.',
+    logEmpty:'Nenhuma decisão registrada ainda.',
+    facts:'Fatos', assumptions:'Premissas', unknowns:'Incógnitas',
+    recommendation:'Recomendação da IA', alternative:'Alternativa',
+    reason:'Motivo', confidence:'Confiança', benefit:'Benefício esperado', risk:'Risco',
+    accept:'Aceitar', modify:'Modificar', reject:'Rejeitar', accepted:'Aceito', rejected:'Rejeitado',
+    saveBtn:'Salvar e aceitar', cancelBtn:'Cancelar',
+    errNoInput:'Preencha ao menos Empresa/Produto e o País-alvo antes de gerar.',
+    errApi:'Falha ao gerar. Verifique sua conexão e tente novamente.',
+    footer:'Esta é uma demo em tempo real: cada clique chama diretamente a API do Claude e gera um novo conjunto de hipóteses de verdade. É um fragmento funcional de um sistema maior de Arquitetura de Negócio, não uma animação roteirizada.'
+  }
+};
+
+function setLang(l){
+  lang = l;
+  document.getElementById('btn-en').classList.toggle('active', l==='en');
+  document.getElementById('btn-ja').classList.toggle('active', l==='ja');
+  document.getElementById('btn-es').classList.toggle('active', l==='es');
+  document.getElementById('btn-pt').classList.toggle('active', l==='pt');
+  const s = STR[l];
+  document.getElementById('eyebrow').textContent = s.eyebrow;
+  document.getElementById('title').textContent = s.title;
+  document.getElementById('lede').textContent = s.lede;
+  document.getElementById('panel-h2').textContent = s.panelH2;
+  document.getElementById('panel-sub').textContent = s.panelSub;
+  document.getElementById('lbl-company').textContent = s.lblCompany;
+  document.getElementById('lbl-country').textContent = s.lblCountry;
+  document.getElementById('lbl-type').textContent = s.lblType;
+  document.getElementById('lbl-budget').textContent = s.lblBudget;
+  document.getElementById('lbl-goal').textContent = s.lblGoal;
+  document.getElementById('lbl-country-other').textContent = s.lblCountryOther;
+  document.getElementById('in-country-other').placeholder = s.countryOtherPlaceholder;
+  document.getElementById('lbl-goal-other').textContent = s.lblGoalOther;
+  document.getElementById('in-goal-other').placeholder = s.goalOtherPlaceholder;
+  document.getElementById('gen-btn').textContent = s.genBtn;
+  document.getElementById('log-h2').textContent = s.logH2;
+  document.getElementById('log-sub').textContent = s.logSub;
+  document.getElementById('footer').textContent = s.footer;
+  if(decisionLog.length===0){document.getElementById('log-empty').textContent = s.logEmpty;}
+  renderCountryOptions(l);
+  renderGoalOptions(l);
+}
+
+function renderGoalOptions(l){
+  const group = document.getElementById('goal-group');
+  const prevChecked = group.querySelector('input:checked');
+  const prevValue = prevChecked ? prevChecked.value : GOALS[0].value;
+  group.innerHTML = GOALS.map((g, i) => `
+    <div class="radio-option">
+      <input type="radio" name="goal" id="goal-opt-${i}" value="${g.value}" onchange="toggleGoalOther()" ${g.value===prevValue?'checked':''}>
+      <label for="goal-opt-${i}">${esc(g[l] || g.en)}</label>
+    </div>
+  `).join('');
+  toggleGoalOther();
+}
+
+function toggleGoalOther(){
+  const checked = document.querySelector('input[name="goal"]:checked');
+  const wrap = document.getElementById('goal-other-wrap');
+  wrap.style.display = (checked && checked.value === 'Other') ? 'flex' : 'none';
+}
+
+function renderCountryOptions(l){
+  const sel = document.getElementById('in-country');
+  const prevValue = sel.value;
+  sel.innerHTML = COUNTRIES.map(c => `<option value="${c.value}">${esc(c[l] || c.en)}</option>`).join('');
+  if(prevValue){ sel.value = prevValue; }
+  toggleCountryOther();
+}
+
+function toggleCountryOther(){
+  const sel = document.getElementById('in-country');
+  const wrap = document.getElementById('in-country-other-wrap');
+  wrap.style.display = sel.value === '__other__' ? 'flex' : 'none';
+}
+
+renderCountryOptions('en');
+renderGoalOptions('en');
+
+function esc(str){
+  const d = document.createElement('div'); d.textContent = str==null?'':String(str); return d.innerHTML;
+}
+
+async function generate(){
+  const s = STR[lang];
+  const company = document.getElementById('in-company').value.trim();
+  const countrySel = document.getElementById('in-country').value;
+  const country = countrySel === '__other__'
+    ? document.getElementById('in-country-other').value.trim()
+    : countrySel;
+  const type = document.getElementById('in-type').value;
+  const budget = document.getElementById('in-budget').value;
+  const goalChecked = document.querySelector('input[name="goal"]:checked');
+  const goalRaw = goalChecked ? goalChecked.value : GOALS[0].value;
+  const goal = goalRaw === 'Other'
+    ? document.getElementById('in-goal-other').value.trim()
+    : goalRaw;
+  const statusEl = document.getElementById('status-text');
+  const genBtn = document.getElementById('gen-btn');
+
+  if(!company || !country){
+    statusEl.textContent = s.errNoInput;
+    statusEl.className = 'error-text';
+    return;
+  }
+
+  genBtn.disabled = true;
+  genBtn.textContent = s.genBtnLoading;
+  statusEl.textContent = '';
+  statusEl.className = 'status-text';
+
+  const displayLangName = lang === 'ja' ? 'Japanese' : 'English';
+
+  const systemPrompt = `You are a Business Architecture hypothesis engine. You never invent unstated facts.
+Given a small set of business input variables, produce EXACTLY one AI recommendation and three alternative hypotheses (labeled A, B, C) that represent genuinely different strategic approaches (e.g. different channel logic, different sequencing, different risk posture) — not superficial variations of the same idea.
+For every hypothesis (recommendation and each of A/B/C) you MUST include: title, reason, confidence (one of "High","Medium","Low"), a one-sentence confidence_reason explaining why that confidence level, expected_benefit, and risk.
+Separately list: facts (only what was literally given as input), assumptions (reasonable inferences you are explicitly making), and unknowns (things you cannot know from the input and should not guess).
+Keep every text field to one concise sentence.
+Write all display text in ${displayLangName}.
+Respond with ONLY valid JSON, no markdown code fences, no preamble, matching exactly this shape:
+{"facts":["..."],"assumptions":["..."],"unknowns":["..."],"recommendation":{"title":"","reason":"","confidence":"High|Medium|Low","confidence_reason":"","expected_benefit":"","risk":""},"alternatives":[{"label":"A","title":"","reason":"","confidence":"","confidence_reason":"","expected_benefit":"","risk":""},{"label":"B","title":"","reason":"","confidence":"","confidence_reason":"","expected_benefit":"","risk":""},{"label":"C","title":"","reason":"","confidence":"","confidence_reason":"","expected_benefit":"","risk":""}]}`;
+
+  const userPrompt = `Company/Product: ${company}\nTarget country/market: ${country}\nBusiness type: ${type}\nMonthly budget: ${budget}\nPrimary goal: ${goal}`;
+
+  try{
+    const response = await fetch(API_ENDPOINT, {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({
+        system: systemPrompt,
+        messages: [{role:"user", content: userPrompt}]
+      })
+    });
+    const data = await response.json();
+    if(!response.ok){
+      throw new Error(data.error || 'request failed');
+    }
+    const textBlock = (data.content || []).find(b => b.type === 'text');
+    if(!textBlock) throw new Error('no text block');
+    const cleaned = textBlock.text.replace(/```json|```/g,'').trim();
+    const parsed = JSON.parse(cleaned);
+    version += 1;
+    renderResults(parsed, version);
+  }catch(err){
+    console.error('Hypothesis engine error:', err);
+    statusEl.textContent = s.errApi;
+    statusEl.className = 'error-text';
+  }finally{
+    genBtn.disabled = false;
+    genBtn.textContent = s.genBtn;
+  }
+}
+
+function confidenceClass(c){
+  const v = (c||'').toLowerCase();
+  if(v.startsWith('h')) return 'high';
+  if(v.startsWith('l')) return 'low';
+  return 'medium';
+}
+
+function renderResults(data, ver){
+  const s = STR[lang];
+  const root = document.getElementById('results');
+  root.innerHTML = '';
+
+  // margin notes
+  const notes = document.createElement('div');
+  notes.className = 'notes';
+  notes.innerHTML = `
+    <div class="note facts"><h4>${s.facts}</h4><ul>${(data.facts||[]).map(f=>`<li>${esc(f)}</li>`).join('') || '<li>—</li>'}</ul></div>
+    <div class="note assumptions"><h4>${s.assumptions}</h4><ul>${(data.assumptions||[]).map(a=>`<li>${esc(a)}</li>`).join('') || '<li>—</li>'}</ul></div>
+    <div class="note unknowns"><h4>${s.unknowns}</h4><ul>${(data.unknowns||[]).map(u=>`<li>${esc(u)}</li>`).join('') || '<li>—</li>'}</ul></div>
+  `;
+  root.appendChild(notes);
+
+  // recommendation
+  root.appendChild(buildCard(data.recommendation, s.recommendation, true, ver));
+
+  // alternatives
+  const p = document.createElement('p');
+  p.className = 'rec-label';
+  p.textContent = s.alternative + ' A / B / C';
+  root.appendChild(p);
+
+  const grid = document.createElement('div');
+  grid.className = 'alts-grid';
+  (data.alternatives||[]).forEach(alt=>{
+    grid.appendChild(buildCard(alt, `${s.alternative} ${alt.label||''}`, false, ver));
+  });
+  root.appendChild(grid);
+}
+
+function buildCard(item, headingText, isRecommendation, ver){
+  const s = STR[lang];
+  const card = document.createElement('div');
+  card.className = 'card' + (isRecommendation ? ' recommendation' : '');
+  const confCls = confidenceClass(item.confidence);
+
+  card.innerHTML = `
+    <div class="card-top">
+      <div>
+        ${isRecommendation ? `<p class="rec-label">${s.recommendation}</p>` : `<p class="alt-tag">${headingText}</p>`}
+        <h3>${esc(item.title)}</h3>
+      </div>
+      <span class="stamp ${confCls}">${esc(item.confidence)}</span>
+    </div>
+    <div class="kv"><span class="k">${s.reason}</span><span class="v">${esc(item.reason)}</span></div>
+    <div class="kv"><span class="k">${s.confidence}</span><span class="v">${esc(item.confidence)}<div class="confidence-reason">${esc(item.confidence_reason)}</div></span></div>
+    <div class="kv"><span class="k">${s.benefit}</span><span class="v">${esc(item.expected_benefit)}</span></div>
+    <div class="kv"><span class="k">${s.risk}</span><span class="v">${esc(item.risk)}</span></div>
+    <div class="action-row"></div>
+    <div class="modify-area"></div>
+  `;
+
+  const actionRow = card.querySelector('.action-row');
+  const modifyArea = card.querySelector('.modify-area');
+
+  const acceptBtn = document.createElement('button');
+  acceptBtn.className = 'action-btn accept';
+  acceptBtn.textContent = s.accept;
+
+  const modifyBtn = document.createElement('button');
+  modifyBtn.className = 'action-btn';
+  modifyBtn.textContent = s.modify;
+
+  const rejectBtn = document.createElement('button');
+  rejectBtn.className = 'action-btn reject';
+  rejectBtn.textContent = s.reject;
+
+  function lockButtons(labelText){
+    [acceptBtn, modifyBtn, rejectBtn].forEach(b=>{b.disabled=true; b.classList.add('done');});
+    acceptBtn.textContent = labelText;
+  }
+
+  acceptBtn.onclick = () => {
+    logDecision(ver, item.title, item.reason, false);
+    lockButtons(s.accepted);
+  };
+  rejectBtn.onclick = () => {
+    lockButtons(s.rejected);
+  };
+  modifyBtn.onclick = () => {
+    if(modifyArea.childElementCount) { modifyArea.innerHTML=''; return; }
+    modifyArea.innerHTML = `
+      <div class="modify-box">
+        <textarea>${esc(item.reason)}</textarea>
+        <div class="save-row">
+          <button class="action-btn accept" data-role="save">${s.saveBtn}</button>
+          <button class="action-btn" data-role="cancel">${s.cancelBtn}</button>
+        </div>
+      </div>`;
+    modifyArea.querySelector('[data-role="save"]').onclick = () => {
+      const newReason = modifyArea.querySelector('textarea').value;
+      logDecision(ver, item.title, newReason, true);
+      modifyArea.innerHTML = '';
+      lockButtons(s.accepted);
+    };
+    modifyArea.querySelector('[data-role="cancel"]').onclick = () => { modifyArea.innerHTML=''; };
+  };
+
+  actionRow.appendChild(acceptBtn);
+  actionRow.appendChild(modifyBtn);
+  actionRow.appendChild(rejectBtn);
+
+  return card;
+}
+
+function logDecision(ver, title, reason, wasModified){
+  const s = STR[lang];
+  decisionLog.unshift({ver, title, reason, wasModified, time: new Date().toLocaleTimeString()});
+  renderLog();
+}
+
+function renderLog(){
+  const s = STR[lang];
+  const list = document.getElementById('log-list');
+  if(decisionLog.length === 0){
+    list.innerHTML = `<div class="log-empty">${s.logEmpty}</div>`;
+    return;
+  }
+  list.innerHTML = decisionLog.map(entry => `
+    <div class="log-entry">
+      <div class="ver">v${entry.ver}</div>
+      <div class="desc"><b>${esc(entry.title)}</b>${entry.wasModified ? ' · modified' : ''}<br>${esc(entry.reason)}</div>
+      <div class="time">${entry.time}</div>
+    </div>
+  `).join('');
+}
+</script>
+</body>
+</html>

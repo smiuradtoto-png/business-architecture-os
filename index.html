@@ -24,15 +24,11 @@
     color:var(--paper); font-family:'IBM Plex Sans', sans-serif; line-height:1.55; min-height:100vh;
   }
   a{color:var(--amber);}
-  .wrap{max-width:980px;margin:0 auto;padding:48px 24px 96px;}
+  .wrap{max-width:1020px;margin:0 auto;padding:48px 24px 96px;}
   .topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;flex-wrap:wrap;gap:16px;}
   .eyebrow{font-family:'IBM Plex Mono', monospace;font-size:12px;letter-spacing:0.14em;text-transform:uppercase;color:var(--amber);margin:0 0 12px;}
   h1{font-family:'Space Grotesk', sans-serif;font-weight:600;font-size:clamp(26px,4vw,38px);margin:0 0 14px;color:var(--paper);letter-spacing:-0.01em;}
-  .lede{color:var(--paper-dim);max-width:640px;font-size:15px;margin:0;}
-  .philosophy-note{
-    font-size:13px;color:var(--paper-faint);font-style:italic;max-width:640px;margin:14px 0 32px;
-    border-left:2px solid var(--amber);padding-left:12px;
-  }
+  .lede{color:var(--paper-dim);max-width:660px;font-size:15px;margin:0;}
 
   .lang-toggle{display:flex;border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;height:fit-content;}
   .lang-toggle button{font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:0.05em;background:transparent;color:var(--paper-dim);border:none;padding:8px 14px;cursor:pointer;}
@@ -69,7 +65,6 @@
   .field textarea{resize:vertical;min-height:56px;}
   .field input::placeholder,.field textarea::placeholder{color:var(--paper-faint);}
   .field input:focus-visible,.field select:focus-visible,.field textarea:focus-visible{outline:2px solid var(--amber);outline-offset:1px;}
-  .hint{font-size:11.5px;color:var(--paper-faint);}
 
   .radio-group,.checkbox-group{display:flex;flex-wrap:wrap;gap:10px 20px;margin-top:2px;}
   .radio-option,.checkbox-option{display:flex;align-items:center;gap:8px;}
@@ -89,7 +84,7 @@
   .status-text{font-family:'IBM Plex Mono',monospace;font-size:12.5px;color:var(--paper-faint);}
   .error-text{font-family:'IBM Plex Mono',monospace;font-size:12.5px;color:var(--rust);}
 
-  .notes{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:28px;}
+  .notes{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:20px;}
   @media (max-width:720px){.notes{grid-template-columns:1fr;}}
   .note{border-left:2px solid var(--line);padding:4px 0 4px 14px;}
   .note h4{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.1em;text-transform:uppercase;margin:0 0 8px;}
@@ -97,18 +92,25 @@
   .note ul{margin:0;padding:0;list-style:none;font-size:13px;color:var(--paper-dim);}
   .note li{margin-bottom:6px;}
 
-  .cards-note{font-size:13px;color:var(--paper-faint);font-style:italic;margin:0 0 18px;}
+  .cards-note{font-size:13px;color:var(--paper-faint);font-style:italic;margin:0 0 18px;max-width:760px;}
   .cards-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:18px;}
-  @media (max-width:800px){.cards-grid{grid-template-columns:1fr;}}
+  @media (max-width:860px){.cards-grid{grid-template-columns:1fr;}}
 
-  .card{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:24px 24px 20px;margin-bottom:0;position:relative;}
-  .card-top{display:flex;justify-content:space-between;align-items:flex-start;gap:14px;margin-bottom:12px;}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:24px 24px 20px;position:relative;}
+  .card-top{margin-bottom:14px;}
   .card h3{font-family:'Space Grotesk',sans-serif;font-size:16px;margin:0;color:var(--paper);}
-  .difficulty-stamp{
-    font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.08em;text-transform:uppercase;
-    padding:4px 9px;border:1.5px dashed currentColor;border-radius:var(--radius);transform:rotate(-3deg);white-space:nowrap;flex-shrink:0;
+
+  .scorecard{
+    display:grid;grid-template-columns:repeat(3,1fr);gap:12px 10px;
+    background:var(--bg-deep);border:1px dashed var(--line);border-radius:var(--radius);
+    padding:12px 14px;margin-bottom:16px;
   }
-  .difficulty-stamp.low{color:var(--teal);} .difficulty-stamp.medium{color:var(--amber);} .difficulty-stamp.high{color:var(--rust);}
+  .scorecard-item{display:flex;flex-direction:column;gap:3px;}
+  .scorecard-item .label{font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:0.05em;text-transform:uppercase;color:var(--paper-faint);}
+  .scorecard-item .stars{font-size:13px;letter-spacing:1px;color:var(--paper-dim);}
+  .scorecard-item.overall{grid-column:1/-1;border-top:1px solid var(--line-soft);padding-top:10px;margin-top:2px;}
+  .scorecard-item.overall .label{color:var(--amber);}
+  .scorecard-item.overall .stars{color:var(--amber);font-size:15px;}
 
   .kv{margin-bottom:10px;}
   .kv .k{font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:0.06em;text-transform:uppercase;color:var(--paper-faint);display:block;margin-bottom:3px;}
@@ -148,7 +150,7 @@
     <div>
       <p class="eyebrow" id="eyebrow">BUSINESS CONTEXT → BLUEPRINT</p>
       <h1 id="title">Business Blueprint Engine</h1>
-      <p class="lede" id="lede">The AI does not decide your strategy. It prepares candidate materials — you review, edit, and approve the ones that become part of your Business Blueprint.</p>
+      <p class="lede" id="lede">The AI does not decide your strategy. It prepares candidate materials scored for real-world execution, not theoretical impact — you review, edit, and approve the ones that become part of your Business Blueprint.</p>
     </div>
     <div class="lang-toggle" role="group" aria-label="Language">
       <button id="btn-en" class="active" onclick="setLang('en')">EN</button>
@@ -265,6 +267,14 @@
           <option value="Complete">Complete</option>
         </select>
       </div>
+      <div class="field">
+        <label id="lbl-team-size" for="in-team-size">Team Size</label>
+        <select id="in-team-size"></select>
+      </div>
+      <div class="field">
+        <label id="lbl-brand-recognition" for="in-brand-recognition">Existing Brand Recognition / References in Target Market</label>
+        <select id="in-brand-recognition"></select>
+      </div>
       <div class="field full">
         <label id="lbl-channels">Sales Channels Available</label>
         <div class="checkbox-group" id="channels-group"></div>
@@ -341,11 +351,25 @@ const CHANNELS = [
   {value:"Distributor", en:"Distributor", ja:"代理店", es:"Distribuidor", pt:"Distribuidor"}
 ];
 
+const TEAM_SIZES = [
+  {value:"Solo founder", en:"Solo founder", ja:"ソロ創業者", es:"Fundador solo", pt:"Fundador solo"},
+  {value:"Small team (2-5)", en:"Small team (2–5)", ja:"小規模チーム(2〜5名)", es:"Equipo pequeño (2–5)", pt:"Equipe pequena (2–5)"},
+  {value:"Growing team (6-20)", en:"Growing team (6–20)", ja:"成長中チーム(6〜20名)", es:"Equipo en crecimiento (6–20)", pt:"Equipe em crescimento (6–20)"},
+  {value:"Established team (20+)", en:"Established team (20+)", ja:"確立済みチーム(20名以上)", es:"Equipo establecido (20+)", pt:"Equipe estabelecida (20+)"}
+];
+
+const BRAND_LEVELS = [
+  {value:"None", en:"None", ja:"なし", es:"Ninguno", pt:"Nenhum"},
+  {value:"Some", en:"Some", ja:"一部あり", es:"Algunos", pt:"Alguns"},
+  {value:"Established", en:"Established", ja:"確立済み", es:"Establecido", pt:"Estabelecido"}
+];
+
 const STR = {
   en:{
     eyebrow:'BUSINESS CONTEXT → BLUEPRINT', title:'Business Blueprint Engine',
-    lede:"The AI does not decide your strategy. It prepares candidate materials — you review, edit, and approve the ones that become part of your Business Blueprint.",
-    philosophyNote:'None of these cards is presented as "the best option." Each is one possible path based on the context you gave — evaluate, edit, or discard freely.',
+    lede:"The AI does not decide your strategy. It prepares candidate materials scored for real-world execution, not theoretical impact — you review, edit, and approve the ones that become part of your Business Blueprint.",
+    philosophyNote:'None of these cards is presented as "the best option." Each is one possible path — evaluate, edit, or discard freely.',
+    scoringNote:'Scores reflect what is realistically executable with your current team, budget, and market presence today — not theoretical potential. A high-impact idea with low execution feasibility appears as a future option, not a first move.',
     panelH2:'Business Context', panelSub:'Enough context for useful brainstorming material — not a full intake form.',
     slProduct:'Product', slMarket:'Market & Budget', slConstraints:'Constraints',
     lblProduct:'Product / Company', lblPrice:'Product Price', lblProductDesc:'Product URL or Description',
@@ -354,13 +378,16 @@ const STR = {
     lblSalesModel:'Sales Model', lblAdBudget:'Monthly Advertising Budget', lblTotalBudget:'Total Project Budget', lblTimeline:'Timeline',
     lblLocalOffice:'Local Office in Target Market', lblYes:'Yes', lblNo:'No',
     lblLocalization:'Localization Status', lblChannels:'Sales Channels Available',
+    lblTeamSize:'Team Size', lblBrandRecognition:'Existing Brand Recognition / References in Target Market',
     lblGoal:'Business Objective', lblGoalOther:'Specify objective', goalOtherPlaceholder:'e.g. Investor due diligence',
     genBtn:'Generate Blueprint Cards', genBtnLoading:'Generating…',
     logH2:'Business Blueprint', logSub:'Approved cards are added here as a new version. Nothing is overwritten, and nothing is added without your approval.',
     logEmpty:'No cards approved yet.',
     facts:'Facts', assumptions:'Assumptions', unknowns:'Unknowns',
     reason:'Reason', advantages:'Advantages', risks:'Risks', estimatedCost:'Estimated Cost',
-    estimatedDifficulty:'Estimated Difficulty', prerequisites:'Prerequisites', expectedTimeline:'Expected Timeline', expectedRoi:'Expected ROI',
+    prerequisites:'Prerequisites', expectedTimeline:'Expected Timeline', expectedRoi:'Expected ROI',
+    scoreBusinessImpact:'Business Impact', scoreExecutionFeasibility:'Execution Feasibility', scoreBudgetFit:'Budget Fit',
+    scoreTimelineFit:'Timeline Fit', scoreTeamFit:'Team Fit', scoreOverall:'Overall Recommendation',
     accept:'Approve', modify:'Edit', reject:'Reject', accepted:'Added to Blueprint', rejected:'Rejected',
     saveBtn:'Save & Approve', cancelBtn:'Cancel',
     errNoInput:'Fill in at least Product / Company and Target Expansion Market before generating.',
@@ -369,8 +396,9 @@ const STR = {
   },
   ja:{
     eyebrow:'ビジネスコンテキスト → ブループリント', title:'ビジネスブループリントエンジン',
-    lede:'AIは戦略を決めません。候補となる材料(Card)を用意するだけです。あなたがそれを評価・編集・採用して、Business Blueprintを組み立てます。',
-    philosophyNote:'どのCardも「これが最善」として提示されるものではありません。入力された情報に基づく可能性の一つに過ぎません。自由に評価・編集・却下してください。',
+    lede:'AIは戦略を決めません。理論上のインパクトではなく「現実的に実行できるか」でスコア付けした材料(Card)を用意するだけです。あなたがそれを評価・編集・採用して、Business Blueprintを組み立てます。',
+    philosophyNote:'どのCardも「これが最善」として提示されるものではありません。可能性の一つに過ぎません。自由に評価・編集・却下してください。',
+    scoringNote:'スコアは、今のチーム・予算・市場での立場で現実的に実行できるかを反映しており、理論上のポテンシャルではありません。インパクトが大きくても実行可能性が低い案は、"今すぐの一手"ではなく将来の選択肢として表示されます。',
     panelH2:'ビジネスコンテキスト', panelSub:'ブレストの材料になる程度の情報で十分です。完全な入力フォームではありません。',
     slProduct:'プロダクト', slMarket:'市場と予算', slConstraints:'制約条件',
     lblProduct:'プロダクト / 会社名', lblPrice:'プロダクト価格', lblProductDesc:'プロダクトURLまたは説明',
@@ -379,13 +407,16 @@ const STR = {
     lblSalesModel:'販売モデル', lblAdBudget:'月間広告予算', lblTotalBudget:'プロジェクト総予算', lblTimeline:'期間',
     lblLocalOffice:'進出先市場に現地拠点あり', lblYes:'あり', lblNo:'なし',
     lblLocalization:'ローカライズ状況', lblChannels:'利用可能な販売チャネル',
+    lblTeamSize:'チーム規模', lblBrandRecognition:'進出先市場での既存の実績・ブランド認知',
     lblGoal:'事業目的', lblGoalOther:'目的を入力', goalOtherPlaceholder:'例:投資家向けデューデリジェンス',
     genBtn:'Blueprint Cardsを生成', genBtnLoading:'生成中…',
     logH2:'ビジネスブループリント', logSub:'採用されたCardはここに新バージョンとして記録されます。上書きはされず、承認なしに追加されることもありません。',
     logEmpty:'まだ採用されたCardはありません。',
     facts:'事実(Facts)', assumptions:'前提(Assumptions)', unknowns:'不明点(Unknowns)',
     reason:'理由', advantages:'利点', risks:'リスク', estimatedCost:'想定コスト',
-    estimatedDifficulty:'想定難易度', prerequisites:'前提条件', expectedTimeline:'想定期間', expectedRoi:'想定ROI',
+    prerequisites:'前提条件', expectedTimeline:'想定期間', expectedRoi:'想定ROI',
+    scoreBusinessImpact:'ビジネスインパクト', scoreExecutionFeasibility:'実行可能性', scoreBudgetFit:'予算適合度',
+    scoreTimelineFit:'期間適合度', scoreTeamFit:'チーム適合度', scoreOverall:'総合評価',
     accept:'採用', modify:'編集', reject:'却下', accepted:'Blueprintに追加済み', rejected:'却下済み',
     saveBtn:'保存して採用', cancelBtn:'キャンセル',
     errNoInput:'生成する前に、プロダクト/会社名と進出予定市場は最低限入力してください。',
@@ -394,8 +425,9 @@ const STR = {
   },
   es:{
     eyebrow:'CONTEXTO DE NEGOCIO → PLANO', title:'Motor de Planos de Negocio',
-    lede:'La IA no decide tu estrategia. Prepara materiales candidatos — tú revisas, editas y apruebas los que pasan a formar parte de tu Plano de Negocio.',
-    philosophyNote:'Ninguna de estas tarjetas se presenta como "la mejor opción". Cada una es un camino posible según el contexto dado — evalúa, edita o descarta libremente.',
+    lede:'La IA no decide tu estrategia. Prepara materiales candidatos puntuados por ejecución real, no por impacto teórico — tú revisas, editas y apruebas los que pasan a formar parte de tu Plano de Negocio.',
+    philosophyNote:'Ninguna de estas tarjetas se presenta como "la mejor opción". Cada una es un camino posible — evalúa, edita o descarta libremente.',
+    scoringNote:'Las puntuaciones reflejan lo que es realmente ejecutable con tu equipo, presupuesto y presencia de mercado actuales — no el potencial teórico. Una idea de alto impacto con baja viabilidad de ejecución aparece como opción futura, no como primer movimiento.',
     panelH2:'Contexto de Negocio', panelSub:'Suficiente contexto para generar material útil de brainstorming, no un formulario completo.',
     slProduct:'Producto', slMarket:'Mercado y Presupuesto', slConstraints:'Restricciones',
     lblProduct:'Producto / Empresa', lblPrice:'Precio del Producto', lblProductDesc:'URL o Descripción del Producto',
@@ -404,13 +436,16 @@ const STR = {
     lblSalesModel:'Modelo de Ventas', lblAdBudget:'Presupuesto de Publicidad Mensual', lblTotalBudget:'Presupuesto Total del Proyecto', lblTimeline:'Plazo',
     lblLocalOffice:'Oficina Local en el Mercado Objetivo', lblYes:'Sí', lblNo:'No',
     lblLocalization:'Estado de Localización', lblChannels:'Canales de Venta Disponibles',
+    lblTeamSize:'Tamaño del Equipo', lblBrandRecognition:'Reconocimiento de Marca / Referencias Existentes en el Mercado Objetivo',
     lblGoal:'Objetivo del Negocio', lblGoalOther:'Especifica el objetivo', goalOtherPlaceholder:'p. ej. debida diligencia para inversores',
     genBtn:'Generar Tarjetas de Plano', genBtnLoading:'Generando…',
     logH2:'Plano de Negocio', logSub:'Las tarjetas aprobadas se añaden aquí como una nueva versión. Nada se sobrescribe ni se añade sin tu aprobación.',
     logEmpty:'Aún no se ha aprobado ninguna tarjeta.',
     facts:'Hechos', assumptions:'Supuestos', unknowns:'Incógnitas',
     reason:'Razón', advantages:'Ventajas', risks:'Riesgos', estimatedCost:'Costo Estimado',
-    estimatedDifficulty:'Dificultad Estimada', prerequisites:'Prerrequisitos', expectedTimeline:'Plazo Esperado', expectedRoi:'ROI Esperado',
+    prerequisites:'Prerrequisitos', expectedTimeline:'Plazo Esperado', expectedRoi:'ROI Esperado',
+    scoreBusinessImpact:'Impacto de Negocio', scoreExecutionFeasibility:'Viabilidad de Ejecución', scoreBudgetFit:'Ajuste de Presupuesto',
+    scoreTimelineFit:'Ajuste de Plazo', scoreTeamFit:'Ajuste de Equipo', scoreOverall:'Recomendación General',
     accept:'Aprobar', modify:'Editar', reject:'Rechazar', accepted:'Añadido al Plano', rejected:'Rechazado',
     saveBtn:'Guardar y Aprobar', cancelBtn:'Cancelar',
     errNoInput:'Completa al menos Producto/Empresa y Mercado de Expansión Objetivo antes de generar.',
@@ -419,8 +454,9 @@ const STR = {
   },
   pt:{
     eyebrow:'CONTEXTO DE NEGÓCIO → PLANTA', title:'Motor de Plantas de Negócio',
-    lede:'A IA não decide sua estratégia. Ela prepara materiais candidatos — você revisa, edita e aprova os que passam a fazer parte da sua Planta de Negócio.',
-    philosophyNote:'Nenhum destes cartões é apresentado como "a melhor opção". Cada um é um caminho possível com base no contexto fornecido — avalie, edite ou descarte livremente.',
+    lede:'A IA não decide sua estratégia. Ela prepara materiais candidatos pontuados pela execução real, não pelo impacto teórico — você revisa, edita e aprova os que passam a fazer parte da sua Planta de Negócio.',
+    philosophyNote:'Nenhum destes cartões é apresentado como "a melhor opção". Cada um é um caminho possível — avalie, edite ou descarte livremente.',
+    scoringNote:'As pontuações refletem o que é realmente executável com sua equipe, orçamento e presença de mercado atuais — não o potencial teórico. Uma ideia de alto impacto com baixa viabilidade de execução aparece como opção futura, não como primeiro movimento.',
     panelH2:'Contexto de Negócio', panelSub:'Contexto suficiente para gerar material útil de brainstorming, não um formulário completo.',
     slProduct:'Produto', slMarket:'Mercado e Orçamento', slConstraints:'Restrições',
     lblProduct:'Produto / Empresa', lblPrice:'Preço do Produto', lblProductDesc:'URL ou Descrição do Produto',
@@ -429,13 +465,16 @@ const STR = {
     lblSalesModel:'Modelo de Vendas', lblAdBudget:'Orçamento de Publicidade Mensal', lblTotalBudget:'Orçamento Total do Projeto', lblTimeline:'Prazo',
     lblLocalOffice:'Escritório Local no Mercado Alvo', lblYes:'Sim', lblNo:'Não',
     lblLocalization:'Status de Localização', lblChannels:'Canais de Venda Disponíveis',
+    lblTeamSize:'Tamanho da Equipe', lblBrandRecognition:'Reconhecimento de Marca / Referências Existentes no Mercado Alvo',
     lblGoal:'Objetivo do Negócio', lblGoalOther:'Especifique o objetivo', goalOtherPlaceholder:'ex.: due diligence para investidores',
     genBtn:'Gerar Cartões da Planta', genBtnLoading:'Gerando…',
     logH2:'Planta de Negócio', logSub:'Cartões aprovados são adicionados aqui como uma nova versão. Nada é sobrescrito nem adicionado sem sua aprovação.',
     logEmpty:'Nenhum cartão aprovado ainda.',
     facts:'Fatos', assumptions:'Premissas', unknowns:'Incógnitas',
     reason:'Motivo', advantages:'Vantagens', risks:'Riscos', estimatedCost:'Custo Estimado',
-    estimatedDifficulty:'Dificuldade Estimada', prerequisites:'Pré-requisitos', expectedTimeline:'Prazo Esperado', expectedRoi:'ROI Esperado',
+    prerequisites:'Pré-requisitos', expectedTimeline:'Prazo Esperado', expectedRoi:'ROI Esperado',
+    scoreBusinessImpact:'Impacto no Negócio', scoreExecutionFeasibility:'Viabilidade de Execução', scoreBudgetFit:'Ajuste de Orçamento',
+    scoreTimelineFit:'Ajuste de Prazo', scoreTeamFit:'Ajuste de Equipe', scoreOverall:'Recomendação Geral',
     accept:'Aprovar', modify:'Editar', reject:'Rejeitar', accepted:'Adicionado à Planta', rejected:'Rejeitado',
     saveBtn:'Salvar e Aprovar', cancelBtn:'Cancelar',
     errNoInput:'Preencha ao menos Produto/Empresa e Mercado de Expansão Alvo antes de gerar.',
@@ -445,6 +484,13 @@ const STR = {
 };
 
 function esc(str){ const d = document.createElement('div'); d.textContent = str==null?'':String(str); return d.innerHTML; }
+
+function renderPlainSelect(selId, list, l){
+  const sel = document.getElementById(selId);
+  const prevValue = sel.value;
+  sel.innerHTML = list.map(o => `<option value="${o.value}">${esc(o[l] || o.en)}</option>`).join('');
+  if(prevValue){ sel.value = prevValue; }
+}
 
 function setLang(l){
   lang = l;
@@ -476,6 +522,8 @@ function setLang(l){
   document.getElementById('lbl-no').textContent = s.lblNo;
   document.getElementById('lbl-localization').textContent = s.lblLocalization;
   document.getElementById('lbl-channels').textContent = s.lblChannels;
+  document.getElementById('lbl-team-size').textContent = s.lblTeamSize;
+  document.getElementById('lbl-brand-recognition').textContent = s.lblBrandRecognition;
   document.getElementById('lbl-goal').textContent = s.lblGoal;
   document.getElementById('lbl-goal-other').textContent = s.lblGoalOther;
   document.getElementById('in-goal-other').placeholder = s.goalOtherPlaceholder;
@@ -488,6 +536,8 @@ function setLang(l){
   renderCountrySelect('in-country', l);
   renderGoalOptions(l);
   renderChannelOptions(l);
+  renderPlainSelect('in-team-size', TEAM_SIZES, l);
+  renderPlainSelect('in-brand-recognition', BRAND_LEVELS, l);
 }
 
 function renderCountrySelect(selId, l){
@@ -552,6 +602,8 @@ async function generate(){
   const timeline = document.getElementById('in-timeline').value;
   const localOffice = document.querySelector('input[name="local-office"]:checked').value;
   const localization = document.getElementById('in-localization').value;
+  const teamSize = document.getElementById('in-team-size').value;
+  const brandRecognition = document.getElementById('in-brand-recognition').value;
   const channels = Array.from(document.querySelectorAll('input[name="channel"]:checked')).map(i=>i.value);
 
   const goalChecked = document.querySelector('input[name="goal"]:checked');
@@ -575,15 +627,24 @@ async function generate(){
   const langNames = {en:'English', ja:'Japanese', es:'Spanish', pt:'Portuguese'};
   const displayLangName = langNames[lang] || 'English';
 
-  const systemPrompt = `You are a Business Architecture brainstorming assistant. You are NOT a consultant and you do NOT make decisions for the user.
-You never invent unstated facts. You never claim any option is "the best" — every card is one possible path based on the given context, for the human to evaluate, edit, or discard.
+  const systemPrompt = `You are a Business Architecture brainstorming assistant. You are NOT a management consultant and you do NOT make decisions for the user.
+CRITICAL RANKING PRINCIPLE: Do not optimize for the biggest opportunity. Optimize for the highest probability of successful execution with the current resources. Think like an experienced business architect designing what can realistically be built today with the stated team, budget, and market presence — not an idealized future.
+You never invent unstated facts. You never claim any card is "the best option" — every card is one possible path for the human to evaluate, edit, or discard.
 Given business context variables, produce 3 to 5 distinct Blueprint Cards representing genuinely different strategic approaches (different channel logic, different sequencing, different risk posture) — not superficial variations of the same idea.
-Each card MUST include: title, reason, advantages, risks, estimated_cost, estimated_difficulty (one of "Low","Medium","High"), prerequisites, expected_timeline, expected_roi.
+High-impact but low-feasibility ideas (e.g. large-scale branding campaigns, conference sponsorships, or enterprise initiatives that require an existing local office, sales team, brand recognition, or references the company does not yet have) may still appear as a card, but only as a lower-priority future-expansion option — never scored as a strong first move when the stated resources do not support it.
+For every card, score six dimensions from 1 to 5 (integers only):
+- business_impact: theoretical upside if it succeeds
+- execution_feasibility: how realistic this is to execute TODAY given the stated team size, budget, local presence, and brand recognition
+- budget_fit: how well this fits the stated advertising and total budget
+- timeline_fit: how well this fits the stated timeline
+- team_fit: whether the stated team size can realistically execute this
+- overall_recommendation: a synthesis that weights execution_feasibility, budget_fit, timeline_fit and team_fit more heavily than business_impact alone
+Each card MUST include: title, reason, advantages, risks, estimated_cost, prerequisites, expected_timeline, expected_roi, and scores (the six 1-5 integers above).
 Keep every text field to one concise sentence.
 Separately list: facts (only what was literally given as input), assumptions (reasonable inferences you are explicitly making), and unknowns (things you cannot know from the input and should not guess).
 Write all display text in ${displayLangName}.
 Respond with ONLY valid JSON, no markdown code fences, no preamble, matching exactly this shape:
-{"facts":["..."],"assumptions":["..."],"unknowns":["..."],"cards":[{"title":"","reason":"","advantages":"","risks":"","estimated_cost":"","estimated_difficulty":"Low|Medium|High","prerequisites":"","expected_timeline":"","expected_roi":""}]}
+{"facts":["..."],"assumptions":["..."],"unknowns":["..."],"cards":[{"title":"","reason":"","advantages":"","risks":"","estimated_cost":"","prerequisites":"","expected_timeline":"","expected_roi":"","scores":{"business_impact":1,"execution_feasibility":1,"budget_fit":1,"timeline_fit":1,"team_fit":1,"overall_recommendation":1}}]}
 Include between 3 and 5 objects in the "cards" array.`;
 
   const userPrompt = `Product/Company: ${product}
@@ -599,6 +660,8 @@ Total project budget: ${totalBudget}
 Timeline: ${timeline}
 Local office in target market: ${localOffice}
 Localization status: ${localization}
+Team size: ${teamSize}
+Existing brand recognition / references in target market: ${brandRecognition}
 Sales channels available: ${channels.length ? channels.join(', ') : 'None specified'}
 Business objective: ${goal}`;
 
@@ -626,11 +689,9 @@ Business objective: ${goal}`;
   }
 }
 
-function difficultyClass(d){
-  const v = (d||'').toLowerCase();
-  if(v.startsWith('l')) return 'low';
-  if(v.startsWith('h')) return 'high';
-  return 'medium';
+function starString(n){
+  const v = Math.max(0, Math.min(5, Math.round(Number(n)||0)));
+  return '★'.repeat(v) + '☆'.repeat(5-v);
 }
 
 function renderResults(data, ver){
@@ -649,7 +710,7 @@ function renderResults(data, ver){
 
   const note = document.createElement('p');
   note.className = 'cards-note';
-  note.textContent = s.philosophyNote;
+  note.textContent = s.philosophyNote + ' ' + s.scoringNote;
   root.appendChild(note);
 
   const grid = document.createElement('div');
@@ -662,12 +723,17 @@ function buildCard(item, ver){
   const s = STR[lang];
   const card = document.createElement('div');
   card.className = 'card';
-  const diffCls = difficultyClass(item.estimated_difficulty);
+  const sc = item.scores || {};
 
   card.innerHTML = `
-    <div class="card-top">
-      <h3>${esc(item.title)}</h3>
-      <span class="difficulty-stamp ${diffCls}">${esc(item.estimated_difficulty)}</span>
+    <div class="card-top"><h3>${esc(item.title)}</h3></div>
+    <div class="scorecard">
+      <div class="scorecard-item"><span class="label">${s.scoreBusinessImpact}</span><span class="stars">${starString(sc.business_impact)}</span></div>
+      <div class="scorecard-item"><span class="label">${s.scoreExecutionFeasibility}</span><span class="stars">${starString(sc.execution_feasibility)}</span></div>
+      <div class="scorecard-item"><span class="label">${s.scoreBudgetFit}</span><span class="stars">${starString(sc.budget_fit)}</span></div>
+      <div class="scorecard-item"><span class="label">${s.scoreTimelineFit}</span><span class="stars">${starString(sc.timeline_fit)}</span></div>
+      <div class="scorecard-item"><span class="label">${s.scoreTeamFit}</span><span class="stars">${starString(sc.team_fit)}</span></div>
+      <div class="scorecard-item overall"><span class="label">${s.scoreOverall}</span><span class="stars">${starString(sc.overall_recommendation)}</span></div>
     </div>
     <div class="kv"><span class="k">${s.reason}</span><span class="v">${esc(item.reason)}</span></div>
     <div class="kv"><span class="k">${s.advantages}</span><span class="v">${esc(item.advantages)}</span></div>

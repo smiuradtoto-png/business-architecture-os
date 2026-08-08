@@ -1,26 +1,18 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Business Hypothesis Engine — Interactive Demo</title>
+<title>Business Blueprint Engine — Interactive Demo</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
   :root{
-    --bg:#152C46;
-    --bg-deep:#0F2136;
-    --panel:#1C3B5C;
-    --panel-raised:#234870;
-    --line: rgba(255,255,255,0.14);
-    --line-soft: rgba(255,255,255,0.07);
-    --paper:#F4F0E6;
-    --paper-dim:#AFC1D4;
-    --paper-faint:#7E96AF;
-    --amber:#E8A33D;
-    --rust:#C05B4D;
-    --teal:#5FAE9E;
-    --radius:2px;
+    --bg:#152C46; --bg-deep:#0F2136; --panel:#1C3B5C; --panel-raised:#234870;
+    --line: rgba(255,255,255,0.14); --line-soft: rgba(255,255,255,0.07);
+    --paper:#F4F0E6; --paper-dim:#AFC1D4; --paper-faint:#7E96AF;
+    --amber:#E8A33D; --rust:#C05B4D; --teal:#5FAE9E; --radius:2px;
   }
   *{box-sizing:border-box;}
   html,body{margin:0;padding:0;}
@@ -29,78 +21,61 @@
       linear-gradient(var(--line-soft) 1px, transparent 1px) 0 0/40px 40px,
       linear-gradient(90deg, var(--line-soft) 1px, transparent 1px) 0 0/40px 40px,
       var(--bg);
-    color:var(--paper);
-    font-family:'IBM Plex Sans', sans-serif;
-    line-height:1.55;
-    min-height:100vh;
+    color:var(--paper); font-family:'IBM Plex Sans', sans-serif; line-height:1.55; min-height:100vh;
   }
   a{color:var(--amber);}
-  .wrap{max-width:960px;margin:0 auto;padding:48px 24px 96px;}
-
-  /* header */
-  .topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:56px;flex-wrap:wrap;gap:16px;}
-  .eyebrow{
-    font-family:'IBM Plex Mono', monospace;
-    font-size:12px;letter-spacing:0.14em;text-transform:uppercase;
-    color:var(--amber);margin:0 0 12px;
+  .wrap{max-width:980px;margin:0 auto;padding:48px 24px 96px;}
+  .topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;flex-wrap:wrap;gap:16px;}
+  .eyebrow{font-family:'IBM Plex Mono', monospace;font-size:12px;letter-spacing:0.14em;text-transform:uppercase;color:var(--amber);margin:0 0 12px;}
+  h1{font-family:'Space Grotesk', sans-serif;font-weight:600;font-size:clamp(26px,4vw,38px);margin:0 0 14px;color:var(--paper);letter-spacing:-0.01em;}
+  .lede{color:var(--paper-dim);max-width:640px;font-size:15px;margin:0;}
+  .philosophy-note{
+    font-size:13px;color:var(--paper-faint);font-style:italic;max-width:640px;margin:14px 0 32px;
+    border-left:2px solid var(--amber);padding-left:12px;
   }
-  h1{
-    font-family:'Space Grotesk', sans-serif;
-    font-weight:600;font-size:clamp(28px,4vw,40px);
-    margin:0 0 14px;color:var(--paper);letter-spacing:-0.01em;
-  }
-  .lede{color:var(--paper-dim);max-width:600px;font-size:15.5px;margin:0;}
 
   .lang-toggle{display:flex;border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;height:fit-content;}
-  .lang-toggle button{
-    font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:0.05em;
-    background:transparent;color:var(--paper-dim);border:none;padding:8px 14px;cursor:pointer;
-  }
+  .lang-toggle button{font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:0.05em;background:transparent;color:var(--paper-dim);border:none;padding:8px 14px;cursor:pointer;}
   .lang-toggle button.active{background:var(--panel-raised);color:var(--paper);}
   .lang-toggle button:focus-visible{outline:2px solid var(--amber);outline-offset:-2px;}
 
-  /* registration crosshairs, used sparingly */
   .drafted{position:relative;}
-  .drafted::before,.drafted::after,
-  .drafted .cr-br,.drafted .cr-bl{
-    content:"";position:absolute;width:14px;height:14px;
-    border-color:var(--paper-faint);opacity:0.55;
+  .drafted::before,.drafted::after,.drafted .cr-br,.drafted .cr-bl{
+    content:"";position:absolute;width:14px;height:14px;border-color:var(--paper-faint);opacity:0.55;
   }
   .drafted::before{top:-1px;left:-1px;border-top:1px solid;border-left:1px solid;}
   .drafted::after{top:-1px;right:-1px;border-top:1px solid;border-right:1px solid;}
   .drafted .cr-bl{bottom:-1px;left:-1px;border-bottom:1px solid;border-left:1px solid;}
   .drafted .cr-br{bottom:-1px;right:-1px;border-bottom:1px solid;border-right:1px solid;}
 
-  /* input panel */
-  .panel{
-    background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);
-    padding:32px;margin-bottom:40px;
+  .panel{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:32px;margin-bottom:32px;}
+  .panel h2{font-family:'Space Grotesk',sans-serif;font-size:17px;margin:0 0 6px;color:var(--paper);}
+  .panel .sub{font-size:13px;color:var(--paper-faint);margin:0 0 22px;}
+  .section-label{
+    font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.1em;text-transform:uppercase;
+    color:var(--amber);margin:26px 0 14px;border-top:1px solid var(--line-soft);padding-top:20px;
   }
-  .panel h2{
-    font-family:'Space Grotesk',sans-serif;font-size:17px;margin:0 0 6px;color:var(--paper);
-  }
-  .panel .sub{font-size:13px;color:var(--paper-faint);margin:0 0 26px;}
-  .field-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:20px 24px;}
+  .section-label:first-of-type{margin-top:0;border-top:none;padding-top:0;}
+
+  .field-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:18px 24px;}
   @media (max-width:640px){.field-grid{grid-template-columns:1fr;}}
   .field{display:flex;flex-direction:column;gap:6px;}
-  .field label{
-    font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.08em;
-    text-transform:uppercase;color:var(--paper-faint);
-  }
-  .field input,.field select{
+  .field.full{grid-column:1/-1;}
+  .field label{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.08em;text-transform:uppercase;color:var(--paper-faint);}
+  .field input,.field select,.field textarea{
     background:var(--bg-deep);border:1px solid var(--line);border-radius:var(--radius);
-    color:var(--paper);font-family:'IBM Plex Sans',sans-serif;font-size:14.5px;padding:10px 12px;
+    color:var(--paper);font-family:'IBM Plex Sans',sans-serif;font-size:14px;padding:10px 12px;
   }
-  .field input::placeholder{color:var(--paper-faint);}
-  .field input:focus-visible,.field select:focus-visible{outline:2px solid var(--amber);outline-offset:1px;}
+  .field textarea{resize:vertical;min-height:56px;}
+  .field input::placeholder,.field textarea::placeholder{color:var(--paper-faint);}
+  .field input:focus-visible,.field select:focus-visible,.field textarea:focus-visible{outline:2px solid var(--amber);outline-offset:1px;}
+  .hint{font-size:11.5px;color:var(--paper-faint);}
 
-  .radio-group{display:flex;flex-wrap:wrap;gap:10px 22px;margin-top:2px;}
-  .radio-option{display:flex;align-items:center;gap:8px;}
-  .radio-option input[type="radio"]{
-    width:16px;height:16px;accent-color:var(--amber);cursor:pointer;flex-shrink:0;
-  }
-  .radio-option input[type="radio"]:focus-visible{outline:2px solid var(--amber);outline-offset:2px;}
-  .radio-option label{font-size:14px;color:var(--paper-dim);cursor:pointer;}
+  .radio-group,.checkbox-group{display:flex;flex-wrap:wrap;gap:10px 20px;margin-top:2px;}
+  .radio-option,.checkbox-option{display:flex;align-items:center;gap:8px;}
+  .radio-option input,.checkbox-option input{width:16px;height:16px;accent-color:var(--amber);cursor:pointer;flex-shrink:0;}
+  .radio-option input:focus-visible,.checkbox-option input:focus-visible{outline:2px solid var(--amber);outline-offset:2px;}
+  .radio-option label,.checkbox-option label{font-size:13.5px;color:var(--paper-dim);cursor:pointer;}
 
   .generate-row{margin-top:28px;display:flex;align-items:center;gap:16px;flex-wrap:wrap;}
   .stamp-btn{
@@ -114,53 +89,35 @@
   .status-text{font-family:'IBM Plex Mono',monospace;font-size:12.5px;color:var(--paper-faint);}
   .error-text{font-family:'IBM Plex Mono',monospace;font-size:12.5px;color:var(--rust);}
 
-  /* margin notes: facts/assumptions/unknowns */
-  .notes{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:32px;}
+  .notes{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:28px;}
   @media (max-width:720px){.notes{grid-template-columns:1fr;}}
   .note{border-left:2px solid var(--line);padding:4px 0 4px 14px;}
-  .note h4{
-    font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.1em;text-transform:uppercase;
-    margin:0 0 8px;
-  }
-  .note.facts h4{color:var(--teal);}
-  .note.assumptions h4{color:var(--amber);}
-  .note.unknowns h4{color:var(--rust);}
+  .note h4{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.1em;text-transform:uppercase;margin:0 0 8px;}
+  .note.facts h4{color:var(--teal);} .note.assumptions h4{color:var(--amber);} .note.unknowns h4{color:var(--rust);}
   .note ul{margin:0;padding:0;list-style:none;font-size:13px;color:var(--paper-dim);}
   .note li{margin-bottom:6px;}
 
-  /* hypothesis cards */
-  .rec-label{
-    font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.1em;text-transform:uppercase;
-    color:var(--amber);margin:0 0 12px;
-  }
-  .card{
-    background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);
-    padding:26px 26px 22px;margin-bottom:20px;position:relative;
-  }
-  .card.recommendation{border-color:var(--amber);background:var(--panel-raised);}
-  .card-top{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;margin-bottom:14px;}
-  .card h3{font-family:'Space Grotesk',sans-serif;font-size:17px;margin:0;color:var(--paper);}
-  .alt-tag{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--paper-faint);}
+  .cards-note{font-size:13px;color:var(--paper-faint);font-style:italic;margin:0 0 18px;}
+  .cards-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:18px;}
+  @media (max-width:800px){.cards-grid{grid-template-columns:1fr;}}
 
-  .stamp{
-    font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:0.08em;text-transform:uppercase;
-    padding:5px 10px;border:1.5px dashed currentColor;border-radius:var(--radius);
-    transform:rotate(-3deg);white-space:nowrap;flex-shrink:0;
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:24px 24px 20px;margin-bottom:0;position:relative;}
+  .card-top{display:flex;justify-content:space-between;align-items:flex-start;gap:14px;margin-bottom:12px;}
+  .card h3{font-family:'Space Grotesk',sans-serif;font-size:16px;margin:0;color:var(--paper);}
+  .difficulty-stamp{
+    font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.08em;text-transform:uppercase;
+    padding:4px 9px;border:1.5px dashed currentColor;border-radius:var(--radius);transform:rotate(-3deg);white-space:nowrap;flex-shrink:0;
   }
-  .stamp.high{color:var(--teal);}
-  .stamp.medium{color:var(--amber);}
-  .stamp.low{color:var(--rust);}
+  .difficulty-stamp.low{color:var(--teal);} .difficulty-stamp.medium{color:var(--amber);} .difficulty-stamp.high{color:var(--rust);}
 
-  .kv{margin-bottom:12px;}
-  .kv .k{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.06em;text-transform:uppercase;color:var(--paper-faint);display:block;margin-bottom:4px;}
-  .kv .v{font-size:14px;color:var(--paper-dim);}
-  .confidence-reason{font-size:12.5px;color:var(--paper-faint);margin-top:2px;font-style:italic;}
+  .kv{margin-bottom:10px;}
+  .kv .k{font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:0.06em;text-transform:uppercase;color:var(--paper-faint);display:block;margin-bottom:3px;}
+  .kv .v{font-size:13.5px;color:var(--paper-dim);}
 
-  .action-row{display:flex;gap:10px;margin-top:18px;flex-wrap:wrap;}
+  .action-row{display:flex;gap:8px;margin-top:16px;flex-wrap:wrap;}
   .action-btn{
-    font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:0.05em;text-transform:uppercase;
-    background:transparent;border:1px solid var(--line);color:var(--paper-dim);border-radius:var(--radius);
-    padding:8px 14px;cursor:pointer;
+    font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.05em;text-transform:uppercase;
+    background:transparent;border:1px solid var(--line);color:var(--paper-dim);border-radius:var(--radius);padding:7px 12px;cursor:pointer;
   }
   .action-btn:hover{border-color:var(--paper);color:var(--paper);}
   .action-btn.accept:hover{border-color:var(--teal);color:var(--teal);}
@@ -168,36 +125,20 @@
   .action-btn:focus-visible{outline:2px solid var(--amber);outline-offset:1px;}
   .action-btn.done{opacity:0.4;cursor:default;}
 
-  .modify-box{margin-top:14px;}
-  .modify-box textarea{
-    width:100%;min-height:70px;background:var(--bg-deep);border:1px solid var(--line);
-    border-radius:var(--radius);color:var(--paper);font-family:'IBM Plex Sans',sans-serif;font-size:13.5px;
-    padding:10px;resize:vertical;
-  }
+  .modify-box{margin-top:12px;}
+  .modify-box textarea{width:100%;min-height:64px;background:var(--bg-deep);border:1px solid var(--line);border-radius:var(--radius);color:var(--paper);font-family:'IBM Plex Sans',sans-serif;font-size:13px;padding:10px;resize:vertical;}
   .modify-box .save-row{margin-top:8px;display:flex;gap:8px;}
 
-  .alts-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;}
-  @media (max-width:840px){.alts-grid{grid-template-columns:1fr;}}
-
-  /* decision log */
-  .log-section{margin-top:56px;}
+  .log-section{margin-top:52px;}
   .log-section h2{font-family:'Space Grotesk',sans-serif;font-size:18px;margin:0 0 4px;}
   .log-section .sub{font-size:13px;color:var(--paper-faint);margin:0 0 20px;}
   .log-empty{font-size:13.5px;color:var(--paper-faint);border:1px dashed var(--line);padding:20px;border-radius:var(--radius);text-align:center;}
-  .log-entry{
-    display:grid;grid-template-columns:70px 1fr 100px;gap:14px;align-items:start;
-    padding:14px 0;border-bottom:1px solid var(--line-soft);font-size:13.5px;
-  }
+  .log-entry{display:grid;grid-template-columns:70px 1fr 100px;gap:14px;align-items:start;padding:14px 0;border-bottom:1px solid var(--line-soft);font-size:13.5px;}
   .log-entry .ver{font-family:'IBM Plex Mono',monospace;color:var(--amber);font-size:12px;}
-  .log-entry .desc{color:var(--paper-dim);}
-  .log-entry .desc b{color:var(--paper);}
+  .log-entry .desc{color:var(--paper-dim);} .log-entry .desc b{color:var(--paper);}
   .log-entry .time{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--paper-faint);text-align:right;}
 
-  footer{margin-top:64px;font-size:12px;color:var(--paper-faint);border-top:1px solid var(--line-soft);padding-top:20px;}
-
-  @media (prefers-reduced-motion: no-preference){
-    .card, .stamp-btn{transition:transform .15s ease, background .15s ease, color .15s ease;}
-  }
+  footer{margin-top:60px;font-size:12px;color:var(--paper-faint);border-top:1px solid var(--line-soft);padding-top:20px;}
 </style>
 </head>
 <body>
@@ -205,9 +146,9 @@
 
   <div class="topbar">
     <div>
-      <p class="eyebrow" id="eyebrow">MODULE 02 / BUSINESS HYPOTHESIS</p>
-      <h1 id="title">Business Hypothesis Engine</h1>
-      <p class="lede" id="lede">Enter a few real variables. The engine drafts one AI recommendation and three structurally distinct alternatives — each stamped with its own confidence, benefit, and risk. Nothing here is presented as fact unless it's marked as one.</p>
+      <p class="eyebrow" id="eyebrow">BUSINESS CONTEXT → BLUEPRINT</p>
+      <h1 id="title">Business Blueprint Engine</h1>
+      <p class="lede" id="lede">The AI does not decide your strategy. It prepares candidate materials — you review, edit, and approve the ones that become part of your Business Blueprint.</p>
     </div>
     <div class="lang-toggle" role="group" aria-label="Language">
       <button id="btn-en" class="active" onclick="setLang('en')">EN</button>
@@ -219,20 +160,26 @@
 
   <section class="panel drafted">
     <span class="cr-bl"></span><span class="cr-br"></span>
-    <h2 id="panel-h2">Business Definition (inputs)</h2>
-    <p class="sub" id="panel-sub">These map directly to the Business Definition module — the same fields used before any research or strategy step begins.</p>
+    <h2 id="panel-h2">Business Context</h2>
+    <p class="sub" id="panel-sub">Enough context for useful brainstorming material — not a full intake form.</p>
+
+    <p class="section-label" id="sl-product">Product</p>
     <div class="field-grid">
       <div class="field">
-        <label id="lbl-company" for="in-company">Company / Product</label>
-        <input id="in-company" type="text" placeholder="e.g. B2B AI reskilling platform">
+        <label id="lbl-product" for="in-product">Product / Company</label>
+        <input id="in-product" type="text" placeholder="e.g. B2B AI reskilling platform">
       </div>
       <div class="field">
-        <label id="lbl-country" for="in-country">Target Country / Market</label>
-        <select id="in-country" onchange="toggleCountryOther()"></select>
+        <label id="lbl-price" for="in-price">Product Price</label>
+        <input id="in-price" type="text" placeholder="e.g. $99/month per seat">
       </div>
-      <div class="field" id="in-country-other-wrap" style="display:none;">
-        <label id="lbl-country-other" for="in-country-other">Specify market</label>
-        <input id="in-country-other" type="text" placeholder="e.g. Nigeria">
+      <div class="field full">
+        <label id="lbl-product-desc" for="in-product-desc">Product URL or Description</label>
+        <textarea id="in-product-desc" placeholder="Paste a URL, or briefly describe what it does"></textarea>
+      </div>
+      <div class="field">
+        <label id="lbl-enterprise-price" for="in-enterprise-price">Enterprise Pricing (optional)</label>
+        <input id="in-enterprise-price" type="text" placeholder="e.g. Custom, from $5k/month">
       </div>
       <div class="field">
         <label id="lbl-type" for="in-type">Business Type</label>
@@ -242,26 +189,98 @@
           <option value="B2B2C">B2B2C</option>
         </select>
       </div>
+    </div>
+
+    <p class="section-label" id="sl-market">Market &amp; Budget</p>
+    <div class="field-grid">
       <div class="field">
-        <label id="lbl-budget" for="in-budget">Monthly Budget</label>
-        <select id="in-budget">
+        <label id="lbl-current-country" for="in-current-country">Current Sales Country</label>
+        <select id="in-current-country" onchange="toggleOther('in-current-country','current-country-other-wrap')"></select>
+      </div>
+      <div class="field" id="current-country-other-wrap" style="display:none;">
+        <label id="lbl-current-country-other" for="in-current-country-other">Specify</label>
+        <input id="in-current-country-other" type="text" placeholder="e.g. Nigeria">
+      </div>
+      <div class="field">
+        <label id="lbl-country" for="in-country">Target Expansion Market</label>
+        <select id="in-country" onchange="toggleOther('in-country','country-other-wrap')"></select>
+      </div>
+      <div class="field" id="country-other-wrap" style="display:none;">
+        <label id="lbl-country-other" for="in-country-other">Specify</label>
+        <input id="in-country-other" type="text" placeholder="e.g. Nigeria">
+      </div>
+      <div class="field">
+        <label id="lbl-sales-model" for="in-sales-model">Sales Model</label>
+        <select id="in-sales-model">
+          <option value="Direct Sales">Direct Sales</option>
+          <option value="Self-Serve / PLG">Self-Serve / PLG</option>
+          <option value="Partner / Reseller">Partner / Reseller</option>
+          <option value="Hybrid">Hybrid</option>
+        </select>
+      </div>
+      <div class="field">
+        <label id="lbl-ad-budget" for="in-ad-budget">Monthly Advertising Budget</label>
+        <select id="in-ad-budget">
           <option value="Under $10k/month">Under $10k / month</option>
           <option value="$10k-$50k/month">$10k–$50k / month</option>
           <option value="$50k+/month">$50k+ / month</option>
           <option value="Unknown">Unknown</option>
         </select>
       </div>
-      <div class="field" style="grid-column:1/-1;">
+      <div class="field">
+        <label id="lbl-total-budget" for="in-total-budget">Total Project Budget</label>
+        <select id="in-total-budget">
+          <option value="Under $10k">Under $10k</option>
+          <option value="$10k-$50k">$10k–$50k</option>
+          <option value="$50k-$200k">$50k–$200k</option>
+          <option value="$200k+">$200k+</option>
+          <option value="Unknown">Unknown</option>
+        </select>
+      </div>
+      <div class="field">
+        <label id="lbl-timeline" for="in-timeline">Timeline</label>
+        <select id="in-timeline">
+          <option value="1-3 months">1–3 months</option>
+          <option value="3-6 months">3–6 months</option>
+          <option value="6-12 months">6–12 months</option>
+          <option value="12+ months">12+ months</option>
+        </select>
+      </div>
+    </div>
+
+    <p class="section-label" id="sl-constraints">Constraints</p>
+    <div class="field-grid">
+      <div class="field">
+        <label id="lbl-local-office" for="local-office-yes">Local Office in Target Market</label>
+        <div class="radio-group">
+          <div class="radio-option"><input type="radio" name="local-office" id="local-office-yes" value="Yes"><label for="local-office-yes" id="lbl-yes">Yes</label></div>
+          <div class="radio-option"><input type="radio" name="local-office" id="local-office-no" value="No" checked><label for="local-office-no" id="lbl-no">No</label></div>
+        </div>
+      </div>
+      <div class="field">
+        <label id="lbl-localization" for="in-localization">Localization Status</label>
+        <select id="in-localization">
+          <option value="Not started">Not started</option>
+          <option value="In progress">In progress</option>
+          <option value="Complete">Complete</option>
+        </select>
+      </div>
+      <div class="field full">
+        <label id="lbl-channels">Sales Channels Available</label>
+        <div class="checkbox-group" id="channels-group"></div>
+      </div>
+      <div class="field full">
         <label id="lbl-goal">Business Objective</label>
         <div class="radio-group" id="goal-group"></div>
       </div>
-      <div class="field" id="goal-other-wrap" style="grid-column:1/-1;display:none;">
+      <div class="field full" id="goal-other-wrap" style="display:none;">
         <label id="lbl-goal-other" for="in-goal-other">Specify objective</label>
         <input id="in-goal-other" type="text" placeholder="e.g. Investor due diligence">
       </div>
     </div>
+
     <div class="generate-row">
-      <button class="stamp-btn" id="gen-btn" onclick="generate()">Generate Hypotheses</button>
+      <button class="stamp-btn" id="gen-btn" onclick="generate()">Generate Blueprint Cards</button>
       <span class="status-text" id="status-text"></span>
     </div>
   </section>
@@ -269,14 +288,12 @@
   <div id="results"></div>
 
   <section class="log-section">
-    <h2 id="log-h2">Decision Log</h2>
-    <p class="sub" id="log-sub">Every accepted hypothesis is recorded here as a new version. Nothing is overwritten.</p>
-    <div id="log-list"><div class="log-empty" id="log-empty">No decisions logged yet.</div></div>
+    <h2 id="log-h2">Business Blueprint</h2>
+    <p class="sub" id="log-sub">Approved cards are added here as a new version. Nothing is overwritten, and nothing is added without your approval.</p>
+    <div id="log-list"><div class="log-empty" id="log-empty">No cards approved yet.</div></div>
   </section>
 
-  <footer id="footer">
-    This is a live demo — each click calls the Claude API directly and generates a genuinely new hypothesis set. It is a working fragment of a larger Business Architecture OS, not a scripted animation.
-  </footer>
+  <footer id="footer">This is a live demo — each click calls the Claude API directly and generates genuinely new material. It is a working fragment of a larger Business Architecture OS, not a scripted animation.</footer>
 
 </div>
 
@@ -285,7 +302,6 @@ let lang = 'en';
 let version = 0;
 const decisionLog = [];
 
-// ↓ デプロイ後、実際のhypothesis-proxy WorkerのURLに書き換える
 const API_ENDPOINT = "https://hypothesis-proxy.s-miura-dtoto.workers.dev";
 
 const COUNTRIES = [
@@ -317,116 +333,150 @@ const GOALS = [
   {value:"Other", en:"Other", ja:"その他", es:"Otro", pt:"Outro"}
 ];
 
+const CHANNELS = [
+  {value:"Web Advertising", en:"Web Advertising", ja:"Web広告", es:"Publicidad web", pt:"Publicidade na web"},
+  {value:"SNS Marketing", en:"SNS Marketing", ja:"SNSマーケティング", es:"Marketing en redes sociales", pt:"Marketing em redes sociais"},
+  {value:"Direct Email", en:"Direct Email", ja:"メールマーケティング", es:"Email directo", pt:"E-mail direto"},
+  {value:"Partner Sales", en:"Partner Sales", ja:"パートナー営業", es:"Ventas por socios", pt:"Vendas por parceiros"},
+  {value:"Distributor", en:"Distributor", ja:"代理店", es:"Distribuidor", pt:"Distribuidor"}
+];
+
 const STR = {
   en:{
-    eyebrow:'MODULE 02 / BUSINESS HYPOTHESIS',
-    title:'Business Hypothesis Engine',
-    lede:"Enter a few real variables. The engine drafts one AI recommendation and three structurally distinct alternatives — each stamped with its own confidence, benefit, and risk. Nothing here is presented as fact unless it's marked as one.",
-    panelH2:'Business Definition (inputs)',
-    panelSub:'These map directly to the Business Definition module — the same fields used before any research or strategy step begins.',
-    lblCompany:'Company / Product', lblCountry:'Target Country / Market', lblType:'Business Type',
-    lblBudget:'Monthly Budget', lblGoal:'Business Objective',
-    lblCountryOther:'Specify market', countryOtherPlaceholder:'e.g. Nigeria',
-    lblGoalOther:'Specify objective', goalOtherPlaceholder:'e.g. Investor due diligence',
-    genBtn:'Generate Hypotheses', genBtnLoading:'Generating…',
-    logH2:'Decision Log', logSub:'Every accepted hypothesis is recorded here as a new version. Nothing is overwritten.',
-    logEmpty:'No decisions logged yet.',
+    eyebrow:'BUSINESS CONTEXT → BLUEPRINT', title:'Business Blueprint Engine',
+    lede:"The AI does not decide your strategy. It prepares candidate materials — you review, edit, and approve the ones that become part of your Business Blueprint.",
+    philosophyNote:'None of these cards is presented as "the best option." Each is one possible path based on the context you gave — evaluate, edit, or discard freely.',
+    panelH2:'Business Context', panelSub:'Enough context for useful brainstorming material — not a full intake form.',
+    slProduct:'Product', slMarket:'Market & Budget', slConstraints:'Constraints',
+    lblProduct:'Product / Company', lblPrice:'Product Price', lblProductDesc:'Product URL or Description',
+    lblEnterprisePrice:'Enterprise Pricing (optional)', lblType:'Business Type',
+    lblCurrentCountry:'Current Sales Country', lblCountry:'Target Expansion Market', lblCountryOther:'Specify',
+    lblSalesModel:'Sales Model', lblAdBudget:'Monthly Advertising Budget', lblTotalBudget:'Total Project Budget', lblTimeline:'Timeline',
+    lblLocalOffice:'Local Office in Target Market', lblYes:'Yes', lblNo:'No',
+    lblLocalization:'Localization Status', lblChannels:'Sales Channels Available',
+    lblGoal:'Business Objective', lblGoalOther:'Specify objective', goalOtherPlaceholder:'e.g. Investor due diligence',
+    genBtn:'Generate Blueprint Cards', genBtnLoading:'Generating…',
+    logH2:'Business Blueprint', logSub:'Approved cards are added here as a new version. Nothing is overwritten, and nothing is added without your approval.',
+    logEmpty:'No cards approved yet.',
     facts:'Facts', assumptions:'Assumptions', unknowns:'Unknowns',
-    recommendation:'AI Recommendation', alternative:'Alternative',
-    reason:'Reason', confidence:'Confidence', benefit:'Expected Benefit', risk:'Risk',
-    accept:'Accept', modify:'Modify', reject:'Reject', accepted:'Accepted', rejected:'Rejected',
-    saveBtn:'Save & Accept', cancelBtn:'Cancel',
-    errNoInput:'Fill in at least Company / Product and Target Country before generating.',
+    reason:'Reason', advantages:'Advantages', risks:'Risks', estimatedCost:'Estimated Cost',
+    estimatedDifficulty:'Estimated Difficulty', prerequisites:'Prerequisites', expectedTimeline:'Expected Timeline', expectedRoi:'Expected ROI',
+    accept:'Approve', modify:'Edit', reject:'Reject', accepted:'Added to Blueprint', rejected:'Rejected',
+    saveBtn:'Save & Approve', cancelBtn:'Cancel',
+    errNoInput:'Fill in at least Product / Company and Target Expansion Market before generating.',
     errApi:'Generation failed — check your connection and try again.',
-    footer:'This is a live demo — each click calls the Claude API directly and generates a genuinely new hypothesis set. It is a working fragment of a larger Business Architecture OS, not a scripted animation.'
+    footer:'This is a live demo — each click calls the Claude API directly and generates genuinely new material. It is a working fragment of a larger Business Architecture OS, not a scripted animation.'
   },
   ja:{
-    eyebrow:'モジュール02 / ビジネス仮説',
-    title:'ビジネス仮説エンジン',
-    lede:'実際の変数をいくつか入力してください。AIレコメンド1件と、構造的に異なる代替仮説3件(A/B/C)を生成します。各仮説にはConfidence(確度)・Expected Benefit(期待効果)・Risk(リスク)が明示され、事実として断定されるのは事実だけです。',
-    panelH2:'ビジネス定義(入力)',
-    panelSub:'Business Definitionモジュールに対応する入力項目です。リサーチや戦略立案の前に、まずここを固定します。',
-    lblCompany:'会社名 / プロダクト', lblCountry:'対象国・市場', lblType:'ビジネスタイプ',
-    lblBudget:'月間予算', lblGoal:'事業目的',
-    lblCountryOther:'市場を入力', countryOtherPlaceholder:'例:ナイジェリア',
-    lblGoalOther:'目的を入力', goalOtherPlaceholder:'例:投資家向けデューデリジェンス',
-    genBtn:'仮説を生成', genBtnLoading:'生成中…',
-    logH2:'意思決定ログ', logSub:'採用された仮説はここに新バージョンとして記録されます。上書きはされません。',
-    logEmpty:'まだ記録された決定はありません。',
+    eyebrow:'ビジネスコンテキスト → ブループリント', title:'ビジネスブループリントエンジン',
+    lede:'AIは戦略を決めません。候補となる材料(Card)を用意するだけです。あなたがそれを評価・編集・採用して、Business Blueprintを組み立てます。',
+    philosophyNote:'どのCardも「これが最善」として提示されるものではありません。入力された情報に基づく可能性の一つに過ぎません。自由に評価・編集・却下してください。',
+    panelH2:'ビジネスコンテキスト', panelSub:'ブレストの材料になる程度の情報で十分です。完全な入力フォームではありません。',
+    slProduct:'プロダクト', slMarket:'市場と予算', slConstraints:'制約条件',
+    lblProduct:'プロダクト / 会社名', lblPrice:'プロダクト価格', lblProductDesc:'プロダクトURLまたは説明',
+    lblEnterprisePrice:'エンタープライズ価格(任意)', lblType:'ビジネスタイプ',
+    lblCurrentCountry:'現在の販売国', lblCountry:'進出予定市場', lblCountryOther:'入力',
+    lblSalesModel:'販売モデル', lblAdBudget:'月間広告予算', lblTotalBudget:'プロジェクト総予算', lblTimeline:'期間',
+    lblLocalOffice:'進出先市場に現地拠点あり', lblYes:'あり', lblNo:'なし',
+    lblLocalization:'ローカライズ状況', lblChannels:'利用可能な販売チャネル',
+    lblGoal:'事業目的', lblGoalOther:'目的を入力', goalOtherPlaceholder:'例:投資家向けデューデリジェンス',
+    genBtn:'Blueprint Cardsを生成', genBtnLoading:'生成中…',
+    logH2:'ビジネスブループリント', logSub:'採用されたCardはここに新バージョンとして記録されます。上書きはされず、承認なしに追加されることもありません。',
+    logEmpty:'まだ採用されたCardはありません。',
     facts:'事実(Facts)', assumptions:'前提(Assumptions)', unknowns:'不明点(Unknowns)',
-    recommendation:'AIレコメンド', alternative:'代替案',
-    reason:'理由', confidence:'確度', benefit:'期待される効果', risk:'リスク',
-    accept:'採用', modify:'修正', reject:'却下', accepted:'採用済み', rejected:'却下済み',
+    reason:'理由', advantages:'利点', risks:'リスク', estimatedCost:'想定コスト',
+    estimatedDifficulty:'想定難易度', prerequisites:'前提条件', expectedTimeline:'想定期間', expectedRoi:'想定ROI',
+    accept:'採用', modify:'編集', reject:'却下', accepted:'Blueprintに追加済み', rejected:'却下済み',
     saveBtn:'保存して採用', cancelBtn:'キャンセル',
-    errNoInput:'生成する前に、会社名/プロダクトと対象国は最低限入力してください。',
+    errNoInput:'生成する前に、プロダクト/会社名と進出予定市場は最低限入力してください。',
     errApi:'生成に失敗しました。接続を確認して再度お試しください。',
-    footer:'これはライブデモです。クリックするたびにClaude APIを直接呼び出し、実際に新しい仮説セットを生成します。これは大きなBusiness Architecture OSの一部を実働させたものであり、演出されたアニメーションではありません。'
+    footer:'これはライブデモです。クリックするたびにClaude APIを直接呼び出し、実際に新しい材料を生成します。これは大きなBusiness Architecture OSの一部を実働させたものであり、演出されたアニメーションではありません。'
   },
   es:{
-    eyebrow:'MÓDULO 02 / HIPÓTESIS DE NEGOCIO',
-    title:'Motor de Hipótesis de Negocio',
-    lede:"Introduce algunas variables reales. El motor redacta una recomendación de la IA y tres alternativas estructuralmente distintas, cada una con su propio nivel de confianza, beneficio esperado y riesgo. Nada aquí se presenta como un hecho salvo que esté marcado como tal.",
-    panelH2:'Definición del Negocio (entradas)',
-    panelSub:'Estos campos corresponden directamente al módulo de Definición del Negocio: los mismos datos que se usan antes de cualquier investigación o estrategia.',
-    lblCompany:'Empresa / Producto', lblCountry:'País / Mercado objetivo', lblType:'Tipo de negocio',
-    lblBudget:'Presupuesto mensual', lblGoal:'Objetivo del negocio',
-    lblCountryOther:'Especifica el mercado', countryOtherPlaceholder:'p. ej. Nigeria',
-    lblGoalOther:'Especifica el objetivo', goalOtherPlaceholder:'p. ej. debida diligencia para inversores',
-    genBtn:'Generar hipótesis', genBtnLoading:'Generando…',
-    logH2:'Registro de Decisiones', logSub:'Cada hipótesis aceptada se registra aquí como una nueva versión. Nada se sobrescribe.',
-    logEmpty:'Aún no se ha registrado ninguna decisión.',
+    eyebrow:'CONTEXTO DE NEGOCIO → PLANO', title:'Motor de Planos de Negocio',
+    lede:'La IA no decide tu estrategia. Prepara materiales candidatos — tú revisas, editas y apruebas los que pasan a formar parte de tu Plano de Negocio.',
+    philosophyNote:'Ninguna de estas tarjetas se presenta como "la mejor opción". Cada una es un camino posible según el contexto dado — evalúa, edita o descarta libremente.',
+    panelH2:'Contexto de Negocio', panelSub:'Suficiente contexto para generar material útil de brainstorming, no un formulario completo.',
+    slProduct:'Producto', slMarket:'Mercado y Presupuesto', slConstraints:'Restricciones',
+    lblProduct:'Producto / Empresa', lblPrice:'Precio del Producto', lblProductDesc:'URL o Descripción del Producto',
+    lblEnterprisePrice:'Precio Empresarial (opcional)', lblType:'Tipo de Negocio',
+    lblCurrentCountry:'País de Venta Actual', lblCountry:'Mercado de Expansión Objetivo', lblCountryOther:'Especifica',
+    lblSalesModel:'Modelo de Ventas', lblAdBudget:'Presupuesto de Publicidad Mensual', lblTotalBudget:'Presupuesto Total del Proyecto', lblTimeline:'Plazo',
+    lblLocalOffice:'Oficina Local en el Mercado Objetivo', lblYes:'Sí', lblNo:'No',
+    lblLocalization:'Estado de Localización', lblChannels:'Canales de Venta Disponibles',
+    lblGoal:'Objetivo del Negocio', lblGoalOther:'Especifica el objetivo', goalOtherPlaceholder:'p. ej. debida diligencia para inversores',
+    genBtn:'Generar Tarjetas de Plano', genBtnLoading:'Generando…',
+    logH2:'Plano de Negocio', logSub:'Las tarjetas aprobadas se añaden aquí como una nueva versión. Nada se sobrescribe ni se añade sin tu aprobación.',
+    logEmpty:'Aún no se ha aprobado ninguna tarjeta.',
     facts:'Hechos', assumptions:'Supuestos', unknowns:'Incógnitas',
-    recommendation:'Recomendación de la IA', alternative:'Alternativa',
-    reason:'Razón', confidence:'Confianza', benefit:'Beneficio esperado', risk:'Riesgo',
-    accept:'Aceptar', modify:'Modificar', reject:'Rechazar', accepted:'Aceptado', rejected:'Rechazado',
-    saveBtn:'Guardar y aceptar', cancelBtn:'Cancelar',
-    errNoInput:'Completa al menos Empresa/Producto y el País objetivo antes de generar.',
+    reason:'Razón', advantages:'Ventajas', risks:'Riesgos', estimatedCost:'Costo Estimado',
+    estimatedDifficulty:'Dificultad Estimada', prerequisites:'Prerrequisitos', expectedTimeline:'Plazo Esperado', expectedRoi:'ROI Esperado',
+    accept:'Aprobar', modify:'Editar', reject:'Rechazar', accepted:'Añadido al Plano', rejected:'Rechazado',
+    saveBtn:'Guardar y Aprobar', cancelBtn:'Cancelar',
+    errNoInput:'Completa al menos Producto/Empresa y Mercado de Expansión Objetivo antes de generar.',
     errApi:'Error al generar. Verifica tu conexión e inténtalo de nuevo.',
-    footer:'Esta es una demo en vivo: cada clic llama directamente a la API de Claude y genera un conjunto de hipótesis realmente nuevo. Es un fragmento funcional de un sistema más amplio de Arquitectura de Negocio, no una animación guionizada.'
+    footer:'Esta es una demo en vivo: cada clic llama directamente a la API de Claude y genera material realmente nuevo. Es un fragmento funcional de un sistema más amplio de Arquitectura de Negocio, no una animación guionizada.'
   },
   pt:{
-    eyebrow:'MÓDULO 02 / HIPÓTESE DE NEGÓCIO',
-    title:'Motor de Hipóteses de Negócio',
-    lede:"Insira algumas variáveis reais. O motor elabora uma recomendação da IA e três alternativas estruturalmente diferentes, cada uma com seu próprio nível de confiança, benefício esperado e risco. Nada aqui é apresentado como fato, a menos que esteja marcado como tal.",
-    panelH2:'Definição do Negócio (entradas)',
-    panelSub:'Estes campos correspondem diretamente ao módulo de Definição do Negócio — os mesmos dados usados antes de qualquer pesquisa ou estratégia.',
-    lblCompany:'Empresa / Produto', lblCountry:'País / Mercado-alvo', lblType:'Tipo de negócio',
-    lblBudget:'Orçamento mensal', lblGoal:'Objetivo do negócio',
-    lblCountryOther:'Especifique o mercado', countryOtherPlaceholder:'ex.: Nigéria',
-    lblGoalOther:'Especifique o objetivo', goalOtherPlaceholder:'ex.: due diligence para investidores',
-    genBtn:'Gerar hipóteses', genBtnLoading:'Gerando…',
-    logH2:'Registro de Decisões', logSub:'Cada hipótese aceita é registrada aqui como uma nova versão. Nada é sobrescrito.',
-    logEmpty:'Nenhuma decisão registrada ainda.',
+    eyebrow:'CONTEXTO DE NEGÓCIO → PLANTA', title:'Motor de Plantas de Negócio',
+    lede:'A IA não decide sua estratégia. Ela prepara materiais candidatos — você revisa, edita e aprova os que passam a fazer parte da sua Planta de Negócio.',
+    philosophyNote:'Nenhum destes cartões é apresentado como "a melhor opção". Cada um é um caminho possível com base no contexto fornecido — avalie, edite ou descarte livremente.',
+    panelH2:'Contexto de Negócio', panelSub:'Contexto suficiente para gerar material útil de brainstorming, não um formulário completo.',
+    slProduct:'Produto', slMarket:'Mercado e Orçamento', slConstraints:'Restrições',
+    lblProduct:'Produto / Empresa', lblPrice:'Preço do Produto', lblProductDesc:'URL ou Descrição do Produto',
+    lblEnterprisePrice:'Preço Empresarial (opcional)', lblType:'Tipo de Negócio',
+    lblCurrentCountry:'País de Venda Atual', lblCountry:'Mercado de Expansão Alvo', lblCountryOther:'Especifique',
+    lblSalesModel:'Modelo de Vendas', lblAdBudget:'Orçamento de Publicidade Mensal', lblTotalBudget:'Orçamento Total do Projeto', lblTimeline:'Prazo',
+    lblLocalOffice:'Escritório Local no Mercado Alvo', lblYes:'Sim', lblNo:'Não',
+    lblLocalization:'Status de Localização', lblChannels:'Canais de Venda Disponíveis',
+    lblGoal:'Objetivo do Negócio', lblGoalOther:'Especifique o objetivo', goalOtherPlaceholder:'ex.: due diligence para investidores',
+    genBtn:'Gerar Cartões da Planta', genBtnLoading:'Gerando…',
+    logH2:'Planta de Negócio', logSub:'Cartões aprovados são adicionados aqui como uma nova versão. Nada é sobrescrito nem adicionado sem sua aprovação.',
+    logEmpty:'Nenhum cartão aprovado ainda.',
     facts:'Fatos', assumptions:'Premissas', unknowns:'Incógnitas',
-    recommendation:'Recomendação da IA', alternative:'Alternativa',
-    reason:'Motivo', confidence:'Confiança', benefit:'Benefício esperado', risk:'Risco',
-    accept:'Aceitar', modify:'Modificar', reject:'Rejeitar', accepted:'Aceito', rejected:'Rejeitado',
-    saveBtn:'Salvar e aceitar', cancelBtn:'Cancelar',
-    errNoInput:'Preencha ao menos Empresa/Produto e o País-alvo antes de gerar.',
+    reason:'Motivo', advantages:'Vantagens', risks:'Riscos', estimatedCost:'Custo Estimado',
+    estimatedDifficulty:'Dificuldade Estimada', prerequisites:'Pré-requisitos', expectedTimeline:'Prazo Esperado', expectedRoi:'ROI Esperado',
+    accept:'Aprovar', modify:'Editar', reject:'Rejeitar', accepted:'Adicionado à Planta', rejected:'Rejeitado',
+    saveBtn:'Salvar e Aprovar', cancelBtn:'Cancelar',
+    errNoInput:'Preencha ao menos Produto/Empresa e Mercado de Expansão Alvo antes de gerar.',
     errApi:'Falha ao gerar. Verifique sua conexão e tente novamente.',
-    footer:'Esta é uma demo em tempo real: cada clique chama diretamente a API do Claude e gera um novo conjunto de hipóteses de verdade. É um fragmento funcional de um sistema maior de Arquitetura de Negócio, não uma animação roteirizada.'
+    footer:'Esta é uma demo em tempo real: cada clique chama diretamente a API do Claude e gera material genuinamente novo. É um fragmento funcional de um sistema maior de Arquitetura de Negócio, não uma animação roteirizada.'
   }
 };
 
+function esc(str){ const d = document.createElement('div'); d.textContent = str==null?'':String(str); return d.innerHTML; }
+
 function setLang(l){
   lang = l;
-  document.getElementById('btn-en').classList.toggle('active', l==='en');
-  document.getElementById('btn-ja').classList.toggle('active', l==='ja');
-  document.getElementById('btn-es').classList.toggle('active', l==='es');
-  document.getElementById('btn-pt').classList.toggle('active', l==='pt');
+  ['en','ja','es','pt'].forEach(x => document.getElementById('btn-'+x).classList.toggle('active', l===x));
   const s = STR[l];
   document.getElementById('eyebrow').textContent = s.eyebrow;
   document.getElementById('title').textContent = s.title;
   document.getElementById('lede').textContent = s.lede;
   document.getElementById('panel-h2').textContent = s.panelH2;
   document.getElementById('panel-sub').textContent = s.panelSub;
-  document.getElementById('lbl-company').textContent = s.lblCompany;
-  document.getElementById('lbl-country').textContent = s.lblCountry;
+  document.getElementById('sl-product').textContent = s.slProduct;
+  document.getElementById('sl-market').textContent = s.slMarket;
+  document.getElementById('sl-constraints').textContent = s.slConstraints;
+  document.getElementById('lbl-product').textContent = s.lblProduct;
+  document.getElementById('lbl-price').textContent = s.lblPrice;
+  document.getElementById('lbl-product-desc').textContent = s.lblProductDesc;
+  document.getElementById('lbl-enterprise-price').textContent = s.lblEnterprisePrice;
   document.getElementById('lbl-type').textContent = s.lblType;
-  document.getElementById('lbl-budget').textContent = s.lblBudget;
-  document.getElementById('lbl-goal').textContent = s.lblGoal;
+  document.getElementById('lbl-current-country').textContent = s.lblCurrentCountry;
+  document.getElementById('lbl-country').textContent = s.lblCountry;
+  document.getElementById('lbl-current-country-other').textContent = s.lblCountryOther;
   document.getElementById('lbl-country-other').textContent = s.lblCountryOther;
-  document.getElementById('in-country-other').placeholder = s.countryOtherPlaceholder;
+  document.getElementById('lbl-sales-model').textContent = s.lblSalesModel;
+  document.getElementById('lbl-ad-budget').textContent = s.lblAdBudget;
+  document.getElementById('lbl-total-budget').textContent = s.lblTotalBudget;
+  document.getElementById('lbl-timeline').textContent = s.lblTimeline;
+  document.getElementById('lbl-local-office').textContent = s.lblLocalOffice;
+  document.getElementById('lbl-yes').textContent = s.lblYes;
+  document.getElementById('lbl-no').textContent = s.lblNo;
+  document.getElementById('lbl-localization').textContent = s.lblLocalization;
+  document.getElementById('lbl-channels').textContent = s.lblChannels;
+  document.getElementById('lbl-goal').textContent = s.lblGoal;
   document.getElementById('lbl-goal-other').textContent = s.lblGoalOther;
   document.getElementById('in-goal-other').placeholder = s.goalOtherPlaceholder;
   document.getElementById('gen-btn').textContent = s.genBtn;
@@ -434,68 +484,84 @@ function setLang(l){
   document.getElementById('log-sub').textContent = s.logSub;
   document.getElementById('footer').textContent = s.footer;
   if(decisionLog.length===0){document.getElementById('log-empty').textContent = s.logEmpty;}
-  renderCountryOptions(l);
+  renderCountrySelect('in-current-country', l);
+  renderCountrySelect('in-country', l);
   renderGoalOptions(l);
+  renderChannelOptions(l);
+}
+
+function renderCountrySelect(selId, l){
+  const sel = document.getElementById(selId);
+  const prevValue = sel.value;
+  sel.innerHTML = COUNTRIES.map(c => `<option value="${c.value}">${esc(c[l] || c.en)}</option>`).join('');
+  if(prevValue){ sel.value = prevValue; }
+  const wrapId = selId === 'in-country' ? 'country-other-wrap' : 'current-country-other-wrap';
+  toggleOther(selId, wrapId);
+}
+
+function toggleOther(selId, wrapId){
+  const sel = document.getElementById(selId);
+  document.getElementById(wrapId).style.display = sel.value === '__other__' ? 'flex' : 'none';
 }
 
 function renderGoalOptions(l){
   const group = document.getElementById('goal-group');
   const prevChecked = group.querySelector('input:checked');
   const prevValue = prevChecked ? prevChecked.value : GOALS[0].value;
-  group.innerHTML = GOALS.map((g, i) => `
+  group.innerHTML = GOALS.map((g,i) => `
     <div class="radio-option">
       <input type="radio" name="goal" id="goal-opt-${i}" value="${g.value}" onchange="toggleGoalOther()" ${g.value===prevValue?'checked':''}>
       <label for="goal-opt-${i}">${esc(g[l] || g.en)}</label>
-    </div>
-  `).join('');
+    </div>`).join('');
   toggleGoalOther();
 }
 
 function toggleGoalOther(){
   const checked = document.querySelector('input[name="goal"]:checked');
-  const wrap = document.getElementById('goal-other-wrap');
-  wrap.style.display = (checked && checked.value === 'Other') ? 'flex' : 'none';
+  document.getElementById('goal-other-wrap').style.display = (checked && checked.value === 'Other') ? 'flex' : 'none';
 }
 
-function renderCountryOptions(l){
-  const sel = document.getElementById('in-country');
-  const prevValue = sel.value;
-  sel.innerHTML = COUNTRIES.map(c => `<option value="${c.value}">${esc(c[l] || c.en)}</option>`).join('');
-  if(prevValue){ sel.value = prevValue; }
-  toggleCountryOther();
+function renderChannelOptions(l){
+  const group = document.getElementById('channels-group');
+  const prevChecked = Array.from(group.querySelectorAll('input:checked')).map(i=>i.value);
+  group.innerHTML = CHANNELS.map((c,i) => `
+    <div class="checkbox-option">
+      <input type="checkbox" name="channel" id="channel-opt-${i}" value="${c.value}" ${prevChecked.includes(c.value)?'checked':''}>
+      <label for="channel-opt-${i}">${esc(c[l] || c.en)}</label>
+    </div>`).join('');
 }
 
-function toggleCountryOther(){
-  const sel = document.getElementById('in-country');
-  const wrap = document.getElementById('in-country-other-wrap');
-  wrap.style.display = sel.value === '__other__' ? 'flex' : 'none';
-}
-
-renderCountryOptions('en');
-renderGoalOptions('en');
-
-function esc(str){
-  const d = document.createElement('div'); d.textContent = str==null?'':String(str); return d.innerHTML;
-}
+setLang('en');
 
 async function generate(){
   const s = STR[lang];
-  const company = document.getElementById('in-company').value.trim();
-  const countrySel = document.getElementById('in-country').value;
-  const country = countrySel === '__other__'
-    ? document.getElementById('in-country-other').value.trim()
-    : countrySel;
+  const product = document.getElementById('in-product').value.trim();
+  const price = document.getElementById('in-price').value.trim();
+  const productDesc = document.getElementById('in-product-desc').value.trim();
+  const enterprisePrice = document.getElementById('in-enterprise-price').value.trim();
   const type = document.getElementById('in-type').value;
-  const budget = document.getElementById('in-budget').value;
+
+  const curSel = document.getElementById('in-current-country').value;
+  const currentCountry = curSel === '__other__' ? document.getElementById('in-current-country-other').value.trim() : curSel;
+  const tgtSel = document.getElementById('in-country').value;
+  const targetCountry = tgtSel === '__other__' ? document.getElementById('in-country-other').value.trim() : tgtSel;
+
+  const salesModel = document.getElementById('in-sales-model').value;
+  const adBudget = document.getElementById('in-ad-budget').value;
+  const totalBudget = document.getElementById('in-total-budget').value;
+  const timeline = document.getElementById('in-timeline').value;
+  const localOffice = document.querySelector('input[name="local-office"]:checked').value;
+  const localization = document.getElementById('in-localization').value;
+  const channels = Array.from(document.querySelectorAll('input[name="channel"]:checked')).map(i=>i.value);
+
   const goalChecked = document.querySelector('input[name="goal"]:checked');
   const goalRaw = goalChecked ? goalChecked.value : GOALS[0].value;
-  const goal = goalRaw === 'Other'
-    ? document.getElementById('in-goal-other').value.trim()
-    : goalRaw;
+  const goal = goalRaw === 'Other' ? document.getElementById('in-goal-other').value.trim() : goalRaw;
+
   const statusEl = document.getElementById('status-text');
   const genBtn = document.getElementById('gen-btn');
 
-  if(!company || !country){
+  if(!product || !targetCountry){
     statusEl.textContent = s.errNoInput;
     statusEl.className = 'error-text';
     return;
@@ -506,32 +572,44 @@ async function generate(){
   statusEl.textContent = '';
   statusEl.className = 'status-text';
 
-  const displayLangName = lang === 'ja' ? 'Japanese' : 'English';
+  const langNames = {en:'English', ja:'Japanese', es:'Spanish', pt:'Portuguese'};
+  const displayLangName = langNames[lang] || 'English';
 
-  const systemPrompt = `You are a Business Architecture hypothesis engine. You never invent unstated facts.
-Given a small set of business input variables, produce EXACTLY one AI recommendation and three alternative hypotheses (labeled A, B, C) that represent genuinely different strategic approaches (e.g. different channel logic, different sequencing, different risk posture) — not superficial variations of the same idea.
-For every hypothesis (recommendation and each of A/B/C) you MUST include: title, reason, confidence (one of "High","Medium","Low"), a one-sentence confidence_reason explaining why that confidence level, expected_benefit, and risk.
-Separately list: facts (only what was literally given as input), assumptions (reasonable inferences you are explicitly making), and unknowns (things you cannot know from the input and should not guess).
+  const systemPrompt = `You are a Business Architecture brainstorming assistant. You are NOT a consultant and you do NOT make decisions for the user.
+You never invent unstated facts. You never claim any option is "the best" — every card is one possible path based on the given context, for the human to evaluate, edit, or discard.
+Given business context variables, produce 3 to 5 distinct Blueprint Cards representing genuinely different strategic approaches (different channel logic, different sequencing, different risk posture) — not superficial variations of the same idea.
+Each card MUST include: title, reason, advantages, risks, estimated_cost, estimated_difficulty (one of "Low","Medium","High"), prerequisites, expected_timeline, expected_roi.
 Keep every text field to one concise sentence.
+Separately list: facts (only what was literally given as input), assumptions (reasonable inferences you are explicitly making), and unknowns (things you cannot know from the input and should not guess).
 Write all display text in ${displayLangName}.
 Respond with ONLY valid JSON, no markdown code fences, no preamble, matching exactly this shape:
-{"facts":["..."],"assumptions":["..."],"unknowns":["..."],"recommendation":{"title":"","reason":"","confidence":"High|Medium|Low","confidence_reason":"","expected_benefit":"","risk":""},"alternatives":[{"label":"A","title":"","reason":"","confidence":"","confidence_reason":"","expected_benefit":"","risk":""},{"label":"B","title":"","reason":"","confidence":"","confidence_reason":"","expected_benefit":"","risk":""},{"label":"C","title":"","reason":"","confidence":"","confidence_reason":"","expected_benefit":"","risk":""}]}`;
+{"facts":["..."],"assumptions":["..."],"unknowns":["..."],"cards":[{"title":"","reason":"","advantages":"","risks":"","estimated_cost":"","estimated_difficulty":"Low|Medium|High","prerequisites":"","expected_timeline":"","expected_roi":""}]}
+Include between 3 and 5 objects in the "cards" array.`;
 
-  const userPrompt = `Company/Product: ${company}\nTarget country/market: ${country}\nBusiness type: ${type}\nMonthly budget: ${budget}\nPrimary goal: ${goal}`;
+  const userPrompt = `Product/Company: ${product}
+Product price: ${price || 'Unknown'}
+Enterprise pricing: ${enterprisePrice || 'Unknown'}
+Product URL or description: ${productDesc || 'Not provided'}
+Business type: ${type}
+Current sales country: ${currentCountry || 'Unknown'}
+Target expansion market: ${targetCountry}
+Sales model: ${salesModel}
+Monthly advertising budget: ${adBudget}
+Total project budget: ${totalBudget}
+Timeline: ${timeline}
+Local office in target market: ${localOffice}
+Localization status: ${localization}
+Sales channels available: ${channels.length ? channels.join(', ') : 'None specified'}
+Business objective: ${goal}`;
 
   try{
     const response = await fetch(API_ENDPOINT, {
       method: "POST",
       headers: {"Content-Type": "application/json"},
-      body: JSON.stringify({
-        system: systemPrompt,
-        messages: [{role:"user", content: userPrompt}]
-      })
+      body: JSON.stringify({ system: systemPrompt, messages: [{role:"user", content: userPrompt}] })
     });
     const data = await response.json();
-    if(!response.ok){
-      throw new Error(data.error || 'request failed');
-    }
+    if(!response.ok){ throw new Error(data.error || 'request failed'); }
     const textBlock = (data.content || []).find(b => b.type === 'text');
     if(!textBlock) throw new Error('no text block');
     const cleaned = textBlock.text.replace(/```json|```/g,'').trim();
@@ -539,7 +617,7 @@ Respond with ONLY valid JSON, no markdown code fences, no preamble, matching exa
     version += 1;
     renderResults(parsed, version);
   }catch(err){
-    console.error('Hypothesis engine error:', err);
+    console.error('Blueprint engine error:', err);
     statusEl.textContent = s.errApi;
     statusEl.className = 'error-text';
   }finally{
@@ -548,10 +626,10 @@ Respond with ONLY valid JSON, no markdown code fences, no preamble, matching exa
   }
 }
 
-function confidenceClass(c){
-  const v = (c||'').toLowerCase();
-  if(v.startsWith('h')) return 'high';
+function difficultyClass(d){
+  const v = (d||'').toLowerCase();
   if(v.startsWith('l')) return 'low';
+  if(v.startsWith('h')) return 'high';
   return 'medium';
 }
 
@@ -560,7 +638,6 @@ function renderResults(data, ver){
   const root = document.getElementById('results');
   root.innerHTML = '';
 
-  // margin notes
   const notes = document.createElement('div');
   notes.className = 'notes';
   notes.innerHTML = `
@@ -570,41 +647,35 @@ function renderResults(data, ver){
   `;
   root.appendChild(notes);
 
-  // recommendation
-  root.appendChild(buildCard(data.recommendation, s.recommendation, true, ver));
-
-  // alternatives
-  const p = document.createElement('p');
-  p.className = 'rec-label';
-  p.textContent = s.alternative + ' A / B / C';
-  root.appendChild(p);
+  const note = document.createElement('p');
+  note.className = 'cards-note';
+  note.textContent = s.philosophyNote;
+  root.appendChild(note);
 
   const grid = document.createElement('div');
-  grid.className = 'alts-grid';
-  (data.alternatives||[]).forEach(alt=>{
-    grid.appendChild(buildCard(alt, `${s.alternative} ${alt.label||''}`, false, ver));
-  });
+  grid.className = 'cards-grid';
+  (data.cards||[]).forEach(card => grid.appendChild(buildCard(card, ver)));
   root.appendChild(grid);
 }
 
-function buildCard(item, headingText, isRecommendation, ver){
+function buildCard(item, ver){
   const s = STR[lang];
   const card = document.createElement('div');
-  card.className = 'card' + (isRecommendation ? ' recommendation' : '');
-  const confCls = confidenceClass(item.confidence);
+  card.className = 'card';
+  const diffCls = difficultyClass(item.estimated_difficulty);
 
   card.innerHTML = `
     <div class="card-top">
-      <div>
-        ${isRecommendation ? `<p class="rec-label">${s.recommendation}</p>` : `<p class="alt-tag">${headingText}</p>`}
-        <h3>${esc(item.title)}</h3>
-      </div>
-      <span class="stamp ${confCls}">${esc(item.confidence)}</span>
+      <h3>${esc(item.title)}</h3>
+      <span class="difficulty-stamp ${diffCls}">${esc(item.estimated_difficulty)}</span>
     </div>
     <div class="kv"><span class="k">${s.reason}</span><span class="v">${esc(item.reason)}</span></div>
-    <div class="kv"><span class="k">${s.confidence}</span><span class="v">${esc(item.confidence)}<div class="confidence-reason">${esc(item.confidence_reason)}</div></span></div>
-    <div class="kv"><span class="k">${s.benefit}</span><span class="v">${esc(item.expected_benefit)}</span></div>
-    <div class="kv"><span class="k">${s.risk}</span><span class="v">${esc(item.risk)}</span></div>
+    <div class="kv"><span class="k">${s.advantages}</span><span class="v">${esc(item.advantages)}</span></div>
+    <div class="kv"><span class="k">${s.risks}</span><span class="v">${esc(item.risks)}</span></div>
+    <div class="kv"><span class="k">${s.estimatedCost}</span><span class="v">${esc(item.estimated_cost)}</span></div>
+    <div class="kv"><span class="k">${s.prerequisites}</span><span class="v">${esc(item.prerequisites)}</span></div>
+    <div class="kv"><span class="k">${s.expectedTimeline}</span><span class="v">${esc(item.expected_timeline)}</span></div>
+    <div class="kv"><span class="k">${s.expectedRoi}</span><span class="v">${esc(item.expected_roi)}</span></div>
     <div class="action-row"></div>
     <div class="modify-area"></div>
   `;
@@ -613,29 +684,19 @@ function buildCard(item, headingText, isRecommendation, ver){
   const modifyArea = card.querySelector('.modify-area');
 
   const acceptBtn = document.createElement('button');
-  acceptBtn.className = 'action-btn accept';
-  acceptBtn.textContent = s.accept;
-
+  acceptBtn.className = 'action-btn accept'; acceptBtn.textContent = s.accept;
   const modifyBtn = document.createElement('button');
-  modifyBtn.className = 'action-btn';
-  modifyBtn.textContent = s.modify;
-
+  modifyBtn.className = 'action-btn'; modifyBtn.textContent = s.modify;
   const rejectBtn = document.createElement('button');
-  rejectBtn.className = 'action-btn reject';
-  rejectBtn.textContent = s.reject;
+  rejectBtn.className = 'action-btn reject'; rejectBtn.textContent = s.reject;
 
   function lockButtons(labelText){
     [acceptBtn, modifyBtn, rejectBtn].forEach(b=>{b.disabled=true; b.classList.add('done');});
     acceptBtn.textContent = labelText;
   }
 
-  acceptBtn.onclick = () => {
-    logDecision(ver, item.title, item.reason, false);
-    lockButtons(s.accepted);
-  };
-  rejectBtn.onclick = () => {
-    lockButtons(s.rejected);
-  };
+  acceptBtn.onclick = () => { logDecision(ver, item.title, item.reason, false); lockButtons(s.accepted); };
+  rejectBtn.onclick = () => { lockButtons(s.rejected); };
   modifyBtn.onclick = () => {
     if(modifyArea.childElementCount) { modifyArea.innerHTML=''; return; }
     modifyArea.innerHTML = `
@@ -658,12 +719,10 @@ function buildCard(item, headingText, isRecommendation, ver){
   actionRow.appendChild(acceptBtn);
   actionRow.appendChild(modifyBtn);
   actionRow.appendChild(rejectBtn);
-
   return card;
 }
 
 function logDecision(ver, title, reason, wasModified){
-  const s = STR[lang];
   decisionLog.unshift({ver, title, reason, wasModified, time: new Date().toLocaleTimeString()});
   renderLog();
 }
@@ -671,17 +730,13 @@ function logDecision(ver, title, reason, wasModified){
 function renderLog(){
   const s = STR[lang];
   const list = document.getElementById('log-list');
-  if(decisionLog.length === 0){
-    list.innerHTML = `<div class="log-empty">${s.logEmpty}</div>`;
-    return;
-  }
+  if(decisionLog.length === 0){ list.innerHTML = `<div class="log-empty">${s.logEmpty}</div>`; return; }
   list.innerHTML = decisionLog.map(entry => `
     <div class="log-entry">
       <div class="ver">v${entry.ver}</div>
-      <div class="desc"><b>${esc(entry.title)}</b>${entry.wasModified ? ' · modified' : ''}<br>${esc(entry.reason)}</div>
+      <div class="desc"><b>${esc(entry.title)}</b>${entry.wasModified ? ' · edited' : ''}<br>${esc(entry.reason)}</div>
       <div class="time">${entry.time}</div>
-    </div>
-  `).join('');
+    </div>`).join('');
 }
 </script>
 </body>

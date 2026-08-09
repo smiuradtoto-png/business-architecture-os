@@ -638,7 +638,7 @@ async function generate(){
   const systemPrompt = `You are a Business Architecture brainstorming assistant. You are NOT a management consultant and you do NOT make decisions for the user.
 CRITICAL RANKING PRINCIPLE: Do not optimize for the biggest opportunity. Optimize for the highest probability of successful execution with the current resources. Think like an experienced business architect designing what can realistically be built today with the stated team, budget, and market presence — not an idealized future.
 You never invent unstated facts. You never claim any card is "the best option" — every card is one possible path for the human to evaluate, edit, or discard.
-Given business context variables, produce 3 to 5 distinct Blueprint Cards representing genuinely different strategic approaches (different channel logic, different sequencing, different risk posture) — not superficial variations of the same idea.
+Given business context variables, produce exactly 3 distinct Blueprint Cards representing genuinely different strategic approaches (different channel logic, different sequencing, different risk posture) — not superficial variations of the same idea.
 High-impact but low-feasibility ideas (e.g. large-scale branding campaigns, conference sponsorships, or enterprise initiatives that require an existing local office, sales team, brand recognition, or references the company does not yet have) may still appear as a card, but only as a lower-priority future-expansion option — never scored as a strong first move when the stated resources do not support it.
 For every card, score six dimensions from 1 to 5 (integers only):
 - business_impact: theoretical upside if it succeeds
@@ -648,12 +648,12 @@ For every card, score six dimensions from 1 to 5 (integers only):
 - team_fit: whether the stated team size can realistically execute this
 - overall_recommendation: a synthesis that weights execution_feasibility, budget_fit, timeline_fit and team_fit more heavily than business_impact alone
 Each card MUST include: title, reason, advantages, risks, estimated_cost, prerequisites, expected_timeline, expected_roi, and scores (the six 1-5 integers above).
-Keep every text field to one concise sentence.
-Separately list: facts (only what was literally given as input), assumptions (reasonable inferences you are explicitly making), and unknowns (things you cannot know from the input and should not guess).
+Keep every text field extremely concise — no more than 12 words each.
+Separately list: facts (only what was literally given as input), assumptions (reasonable inferences you are explicitly making), and unknowns (things you cannot know from the input and should not guess) — at most 3 items each.
 Write all display text in ${displayLangName}.
 Respond with ONLY valid JSON, no markdown code fences, no preamble, matching exactly this shape:
 {"facts":["..."],"assumptions":["..."],"unknowns":["..."],"cards":[{"title":"","reason":"","advantages":"","risks":"","estimated_cost":"","prerequisites":"","expected_timeline":"","expected_roi":"","scores":{"business_impact":1,"execution_feasibility":1,"budget_fit":1,"timeline_fit":1,"team_fit":1,"overall_recommendation":1}}]}
-Include between 3 and 5 objects in the "cards" array.`;
+The "cards" array must contain exactly 3 objects.`;
 
   const userPrompt = `Product/Company: ${product}
 Product price: ${price || 'Unknown'}
@@ -683,7 +683,7 @@ Business objective: ${goal}`;
     if(!response.ok){ throw new Error(data.error || 'request failed'); }
     const textBlock = (data.content || []).find(b => b.type === 'text');
     if(!textBlock) throw new Error('no text block');
-    const cleaned = textBlock.text.replace(/```json|```/g,'').trim().replace(/,(\s*[}\]])/g, '$1');
+    const cleaned = extractJson(textBlock.text);
     const parsed = JSON.parse(cleaned);
     version += 1;
     renderResults(parsed, version);
@@ -696,6 +696,21 @@ Business objective: ${goal}`;
     genBtn.textContent = s.genBtn;
     document.getElementById('spinner').style.display = 'none';
   }
+}
+
+function extractJson(raw){
+  let text = raw.replace(/```json|```/g, '').trim();
+  const start = text.indexOf('{');
+  const end = text.lastIndexOf('}');
+  if(start !== -1 && end !== -1 && end > start){
+    text = text.slice(start, end + 1);
+  }
+  let prev;
+  do{
+    prev = text;
+    text = text.replace(/,(\s*[}\]])/g, '$1');
+  } while(text !== prev);
+  return text;
 }
 
 function starString(n){
